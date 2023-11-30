@@ -1,6 +1,6 @@
 provider "aws" {
   region     = "us-west-1" #North California
-  access_key = "AKIAUVBUS6JDAVPQ6J6T"
+  access_key = "******************"
   secret_key = "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"
 }
 

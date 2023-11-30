@@ -1,6 +1,6 @@
 provider "aws" {
   region     = "eu-west-2" #London
-  access_key = "AKIAURFMSNIXRNWC3NJY" # miomnisports account
+  access_key = "***************" # miomnisports account
   secret_key =  "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"
 }
 

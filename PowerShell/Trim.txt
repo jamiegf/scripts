@@ -1,0 +1,3 @@
+# if item in list has 894410003 at start - its will be trimmed off 
+$file = get-content c:\list.txt
+$file | % {$_.trimstart("894410003")} | Out-File c:\sim_trimmed.txt

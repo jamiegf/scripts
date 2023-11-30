@@ -1,0 +1,23 @@
+  $days = Get-Content C:\temp\dayss.txt
+
+  foreach ($day in $days)
+    {
+             #$day = "01_01_2019"
+              $path = "C:\Temp\JGF\$day"
+              cd $path
+              $folder = gci 
+
+             # cd $folder
+              $n = 0
+              $c = 0
+              foreach ($file in $folder)
+              {
+              $a = Get-content $file 
+              $n = $a.count
+              write-host "----$n"
+              $c = $c + $n
+      
+                    write-host $c}
+                  $c |  out-file c:\temp\totals2.txt -Append
+
+                  }

@@ -1,0 +1,2 @@
+if (!(test-path E:\MVM-PRD1\12.1.2018))
+        {write-host "yo"!}

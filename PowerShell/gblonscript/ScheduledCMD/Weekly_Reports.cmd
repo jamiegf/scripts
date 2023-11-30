@@ -1,0 +1,1 @@
+powershell -command "& 'c:\scripts\reports\weekly_report.ps1'"

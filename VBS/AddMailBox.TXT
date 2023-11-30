@@ -1,0 +1,27 @@
+Option Explicit
+Dim WshShl
+
+
+
+Set WshShl = WScript.CreateObject("WScript.Shell")
+
+WshShl.Run "Outlook"
+
+WScript.Sleep 4000
+WshShl.SendKeys "%{t}"
+WScript.Sleep 500
+WshShl.SendKeys "a"
+WScript.Sleep 500
+WshShl.SendKeys "%{a}"
+WScript.Sleep 500
+WshShl.SendKeys "%{m}"
+'WScript.Sleep 500
+WshShl.SendKeys "+{TAB}"
+'WScript.Sleep 500
+WshShl.SendKeys "{RIGHT}"
+'WScript.Sleep 500
+WshShl.SendKeys "%{d}"
+WScript.Sleep 500
+'WshShl.SendKeys "%{F4}"
+'WshShl.SendKeys "%{N}"
+

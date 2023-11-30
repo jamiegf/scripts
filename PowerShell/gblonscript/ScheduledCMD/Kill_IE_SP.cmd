@@ -1,0 +1,1 @@
+powershell -command "& 'c:\scripts\sp\Kill_IE.ps1'"

@@ -1,0 +1,16 @@
+
+#add the vscode extension - bicep
+
+#install bicep cli
+choco install bicep
+
+#install azure cli
+#check if there:
+Get-Module -Name AzureRM -ListAvailable
+#install with
+Install-Module -Name Az -Repository PSGallery -Force
+Update-Module -Name Az -Force
+#check it
+get-installedmodule Az
+
+

@@ -1,0 +1,10 @@
+Add-PSSnapin quest.activeroles.admanagement
+$ouc = "ou=EU Client Machines,dc=eu,dc=above,dc=net"
+
+$a = get-qadcomputer -searchroot $ouc
+
+$a | % {
+
+        $b = gwmi win32_computersystem -ComputerName $_.name
+        if ($b) {$b.name + "," +  $b.model + "," +  $b.username| out-file c:\machine_models.txt -append}
+        }

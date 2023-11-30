@@ -1,0 +1,1 @@
+Get-QADUser -searchroot $ou -IncludeAllProperties | where{$_.msNPAllowDialin -eq $true}

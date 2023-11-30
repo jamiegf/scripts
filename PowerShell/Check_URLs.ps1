@@ -1,0 +1,1 @@
+﻿$urls = "http://stnrsmobile-qa.stationcasinos.com:8082/ClientService.svc" , "https://stnrsmobile-qa.stationcasinos.com/pleeappservice.dll", "http://stnrsmobile-qa.stationcasinos.com:8080/refresh.aspx/Refresh"

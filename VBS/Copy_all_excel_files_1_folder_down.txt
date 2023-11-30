@@ -1,0 +1,22 @@
+On Error Resume next
+Const OverwriteExisting = TRUE
+Dim strpath
+
+strComputer = "."
+
+
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+Set objWMIService = GetObject("winmgmts:" _
+    & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
+
+Set colSubfolders = objWMIService.ExecQuery _
+    ("Associators of {Win32_Directory.Name='S:\Operations\Technical Services\LON-FIBER ASSIGNMENTS\FA - LONDON BUILDING CABLES'} " _
+        & "Where AssocClass = Win32_Subdirectory " _
+            & "ResultRole = PartComponent")
+
+For Each objFolder in colSubfolders
+   strpath = objFolder.Name
+   objFSO.CopyFile strpath & "\*.xls" , "S:\Operations\Technical Services\LON-FIBER ASSIGNMENTS\FA - LONDON BUILDING CABLES\Exhaust data\Exhaust_Baseline_ent_riser" , OverwriteExisting
+   
+    
+Next

@@ -1,0 +1,1 @@
+HKEY_USERS\S-1-5-21-3885742197-2359313659-1562723473-8160\Software\Microsoft\Windows\CurrentVersion\WinTrust\Trust Providers\Software Publishing

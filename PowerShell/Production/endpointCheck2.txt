@@ -1,0 +1,34 @@
+
+# ENDPOINT CHECKER
+$WebAddress = "https://hubssh.lvdc.com"
+$webport = "5017"
+
+
+################################################################################################
+
+$WIwebConn = ""
+$WIwebConn = New-Object System.Net.Sockets.TcpClient("$WebAddress", $webport)
+if (!$WIwebConn)
+    {        
+                $emailBody = 
+@"
+Web connection failed to
+$WebAddress : $webport
+on server : $env:computername
+
+
+
+"@
+                            $fromAddress = "NVAlerts@miomni.com"
+                            $emailAddress = "alert@miomni.com"
+                            $password = "777RedHound321"
+                            $to = "sysadmin@miomni.com"
+                            $smtpServer = "smtp.office365.com"
+                            $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
+                            $mycreds = New-Object System.Management.Automation.PSCredential ($emailAddress, $secpasswd)
+                            $port = "587"
+			                $subject = "Race EndPoint Connection Failure! "
+                            
+                            
+                           
+           Send-MailMessage -To $to -SmtpServer $smtpServer -Credential $mycreds -UseSsl $subject -Port $port -Body $emailBody -From $fromAddress}

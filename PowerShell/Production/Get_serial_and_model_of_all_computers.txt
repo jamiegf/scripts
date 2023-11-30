@@ -1,0 +1,5 @@
+Add-Pssnapin quest.activeroles.admanagement
+$a = get-qadcomputer 
+$a | % { $b = gwmi win32_systemenclosure -ComputerName $_.name
+            $c = gwmi win32_computersystem -computername $_.name
+            $_.name + "," + $b.serialnumber + "," +  $c.model + "`n" >> c:\serials2.txt} 

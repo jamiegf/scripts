@@ -1,0 +1,1 @@
+powershell -command "& 'c:\scripts\sp\Open_IE_sharepoint_Sites.ps1'"

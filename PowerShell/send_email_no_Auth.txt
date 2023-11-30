@@ -1,0 +1,9 @@
+    $SMTPserver = "smtp.ctoscana.costa.it" # 10.51.54.52
+    $from = "test@test123.com"
+    $to = "graeme.kay@miomnisports.com"
+    $bcc = "jamie.garrow-fisher@miomni.com"
+    $subject = "test email"
+    $emailbody = "test test test"
+    
+
+    Send-MailMessage -To $to -from $from -bcc $bcc -smtpServer $SMTPServer -subject $subject -body $emailbody

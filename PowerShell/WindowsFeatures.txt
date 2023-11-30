@@ -1,0 +1,15 @@
+#Import/export from existing Node:
+Import-Module ServerManager
+Get-WindowsFeature | 
+  ? { $_.Installed } | 
+  Sort-Object Name | 
+  Select Name | 
+  ForEach-Object { $_.Name } | 
+  Out-File c:\temp\Features.txt
+ 
+#Import to new Node :
+ 
+Import-Module ServerManager
+$(Get-Content c:\temp\Features.txt) | 
+  Add-WindowsFeature
+ 

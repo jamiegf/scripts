@@ -1,0 +1,37 @@
+
+on error resume next
+Dim objNetwork 
+
+
+
+Set objNetwork = CreateObject("wscript.network") 
+strUser = objNetwork.username
+strPass = Inputbox ("Enter bytesnet password")
+
+
+
+'btgukweb06
+objNetwork.MapNetworkDrive "X:", "\\192.168.2.100\websites$", False, "Administrator", "Pu8l!c4ti0n"
+
+'btgukdev02
+objNetwork.MapNetworkDrive "W:", "\\192.168.2.30\d$", False, "Administrator", "Kr15py"
+
+'btgukdat03
+objNetwork.MapNetworkDrive "H:", "\\192.168.1.222\Home\" & strUser, False, strUser, strPass
+'btgukdat02
+objNetwork.MapNetworkDrive "K:", "\\192.168.1.216\Custs", False, strUser, strPass
+'btgukdat03
+objNetwork.MapNetworkDrive "P:", "\\192.168.1.222\Shared\Internal Systems", False, strUser, strPass
+'btgukarc01
+objNetwork.MapNetworkDrive "T:", "\\192.168.1.211\Software", False, strUser, strPass
+'btgukdat02
+objNetwork.MapNetworkDrive "L:", "\\192.168.1.216\Library", False, strUser, strPass
+'btgukdat02
+objNetwork.MapNetworkDrive "S:", "\\192.168.1.222\Supplier", False, strUser, strPass
+'btgukimg01
+objNetwork.MapNetworkDrive "U:", "\\192.168.1.2\Images", False, strUser, strPass
+'btgukweb03
+objNetwork.MapNetworkDrive "Y:", "\\192.168.1.213\Intranet", False, strUser, strPass
+
+
+Set objNetwork = Nothing 

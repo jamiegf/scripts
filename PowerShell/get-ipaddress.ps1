@@ -1,0 +1,1 @@
+$ip = (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet0).IPAddress #check interface name

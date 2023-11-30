@@ -1,0 +1,16 @@
+
+$computers = Get-Content "c:\comps.txt"
+FOREACH ($strComputer in $computers )
+	{
+	$colSlots = Get-WmiObject -Class "win32_PhysicalMemoryArray" -namespace "root\CIMV2" `
+	-computerName $strComputer
+	$colRAM = Get-WmiObject -Class "win32_PhysicalMemory" -namespace "root\CIMV2" `
+	-computerName $strComputer
+	Foreach ($objSlot In $colSlots){
+	    " $strComputer : Total Number of DIMM Slots: " + $objSlot.MemoryDevices
+					}
+		Foreach ($objRAM In $colRAM) {
+    			"Memory Installed: " + $objRAM.DeviceLocator
+			    "Memory Size: " + ($objRAM.Capacity / 1GB) + " GB"
+					}
+	}

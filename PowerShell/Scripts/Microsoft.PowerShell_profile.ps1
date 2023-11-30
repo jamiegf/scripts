@@ -1,0 +1,4 @@
+Add-PSSnapin quest.activeroles.admanagement
+import-module webadministration
+Add-PSSnapin SqlServerCmdletSnapin100
+Add-PSSnapin SqlServerProviderSnapin100

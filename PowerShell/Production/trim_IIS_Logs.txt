@@ -1,0 +1,40 @@
+$cDrive = get-volume C
+$cDriveSize = $cDrive.sizeRemaining
+$cDriveSizeGB = $cDriveSize /1024 /1024 /1024 
+$cDriveSizeGBBefore = [math]::Round($cDriveSizeGB,3)
+
+Get-ChildItem C:\inetpub\logs\LogFiles -Include U_ex*.log -Recurse | Where-Object {$_.LastWriteTime -lt (Get-Date).AddDays(-30)} | Remove-Item
+
+
+
+$cDrive = get-volume C
+$cDriveSize = $cDrive.sizeRemaining
+$cDriveSizeGB = $cDriveSize /1024 /1024 /1024 
+$cDriveSizeGBAfter = [math]::Round($cDriveSizeGB,3)
+
+
+
+#Email Body for Daily
+$emailBody = @"
+Load Balancer IIS Logs
+***********************
+
+Space remaining on C Drive before daily purge = $cDriveSizeGBBefore GB
+
+Space remaining on C Drive after daily purge = $cDriveSizeGBAfter GB
+
+
+"@
+                            $emailAddress = "notifications_NV@miomni.com"
+                            $user = "alert@miomni.com"
+                            $password = "777RedHound321"
+                            $to = "sysadmin@miomni.com"
+                            $smtpServer = "smtp.office365.com"
+                            $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
+                            $mycreds = New-Object System.Management.Automation.PSCredential ($user, $secpasswd)
+                            $port = "587"
+			       $subject = "$env:computername Daily Update"
+                            
+                            
+                           
+           Send-MailMessage -To $to -SmtpServer $smtpServer -Credential $mycreds -UseSsl $subject -Port $port -Body $emailBody -From $emailAddress

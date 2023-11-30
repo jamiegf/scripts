@@ -1,0 +1,1592 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0199)http://www.simple-talk.com/sql/database-administration/sql-server-database-growth-and-autogrowth-settings/ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><HTML 
+xmlns="http://www.w3.org/1999/xhtml"><HEAD><LINK rel="stylesheet" type="text/css" 
+href="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/main.css">
+<META content="text/html; charset=utf-8" http-equiv="Content-Type">
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/jquery.min.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/script.js"></SCRIPT>
+
+<SCRIPT language="javascript">
+        function siteSearch(e, strUrl, strSearchParam, strSearchControl)
+        {
+        	if (e.keyCode == 13)
+	        {
+	            // force a mouseover
+	            btnSearchOver();
+	            
+                // let the click event do the work
+	            return(doSiteSearch(strUrl, strSearchParam, strSearchControl));
+            }
+            else
+            {
+                // allow further processing
+                return(true);
+            } 
+        }
+        var m_over = false;
+        function btnSearchOver() { m_over = true; }
+        function btnSearchOut() { m_over = false; }
+        function doSiteSearch(strUrl, strSearchParam, strSearchControl)
+        {
+        	if (m_over == true)
+	        {
+                // get the text and strip any spaces
+                var strText = document.getElementById(strSearchControl).value;
+                while (strText.substring(0,1) == ' ') strText = strText.substring(1,strText.length);
+                while (strText.substring(strText.length-1,strText.length) == ' ') strText = strText.substring(0,strText.length-1);
+      
+                // add the parameters
+                strUrl = strUrl + "?" + strSearchParam + "=" + encodeString(strText);
+             
+                // now navigate
+                document.location.href = strUrl;
+            }
+                            
+            // stop further processing
+            return(false);
+        }        
+        function encodeString(plaintext)
+        {
+            var encodedtext = "";
+            for (var i=0; i<plaintext.length; i++)
+            {
+                if (plaintext.charAt(i) == " ")
+                    encodedtext += "+";
+                else
+                    encodedtext += plaintext.charAt(i);
+            }
+            return(escape(encodedtext));
+        }
+    </SCRIPT>
+<LINK rel="stylesheet" type="text/css" href="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/colorbox.css">
+<LINK rel="stylesheet" type="text/css" href="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sql.css">
+<META description="It's easy to create a database nowadays with point-'n-click, but if you've left your database's autogrowth settings at their default, you may hit problems in the future. Why? What do I do about it? Read on!">
+<META keywords="Auto-growth, Autogrowth, Growth, Database size"><TITLE>	SQL 
+Server Database Growth and Autogrowth Settings</TITLE>
+<META name="GENERATOR" content="MSHTML 9.00.8112.16430"></HEAD>
+<BODY>
+<DIV id="corner-peel"><A href="http://monitor.red-gate.com/?utm_source=simpletalk&amp;utm_medium=peel&amp;utm_content=corner_peel201104&amp;utm_campaign=sqlmonitor"><IMG 
+alt="Click here to monitor SSC" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/corner-peel.png"></A>
+<DIV id="corner-peel-behind"></DIV></DIV>
+<FORM id="aspnetForm" onsubmit="javascript:return WebForm_OnSubmit();" method="post" 
+name="aspnetForm" action="http://www.simple-talk.com/content/article.aspx?article=1395">
+<DIV><INPUT id="__EVENTTARGET" name="__EVENTTARGET" type="hidden"><INPUT id="__EVENTARGUMENT" 
+name="__EVENTARGUMENT" type="hidden"><INPUT id="__VIEWSTATE" name="__VIEWSTATE" 
+value="/wEPDwUKMTg5ODQ5NzU3N2QYBAUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgwFD2N0bDAwJGJ0blNlYXJjaAUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMQUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMQUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMgUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMgUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMwUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nMwUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nNAUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nNAUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nNQUcY3RsMDAkTWFpbkNvbnRlbnQkcmFkUmF0aW5nNQUgY3RsMDAkTWFpbkNvbnRlbnQkYnRuUmF0ZUFydGljbGUFBl9fUGFnZQ8UKwADZAXOAUl0J3MgZWFzeSB0byBjcmVhdGUgYSBkYXRhYmFzZSBub3dhZGF5cyB3aXRoIHBvaW50LSduLWNsaWNrLCBidXQgaWYgeW91J3ZlIGxlZnQgeW91ciBkYXRhYmFzZSdzIGF1dG9ncm93dGggc2V0dGluZ3MgYXQgdGhlaXIgZGVmYXVsdCwgeW91IG1heSBoaXQgcHJvYmxlbXMgaW4gdGhlIGZ1dHVyZS4gV2h5PyBXaGF0IGRvIEkgZG8gYWJvdXQgaXQ/IFJlYWQgb24hBS5BdXRvLWdyb3d0aCwgQXV0b2dyb3d0aCwgR3Jvd3RoLCBEYXRhYmFzZSBzaXplZAUcY3RsMDAkTWFpbkNvbnRlbnQkRm9ydW1WaWV3MQ8UKwACZALvxwNkBRFjdGwwMCROYXZpZ2F0aW9uMQ8UKwACZDKMBQABAAAA/////wEAAAAAAAAADAIAAAA/V2ViU2l0ZSwgVmVyc2lvbj0xLjMuMC40NiwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAAB5U3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuTGlzdGAxW1tTaW1wbGVUYWxrLk1lbnVJdGVtLCBXZWJTaXRlLCBWZXJzaW9uPTEuMy4wLjQ2LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQMAAAAGX2l0ZW1zBV9zaXplCF92ZXJzaW9uBAAAFVNpbXBsZVRhbGsuTWVudUl0ZW1bXQIAAAAICAkDAAAAAwAAAAMAAAAHAwAAAAABAAAABAAAAAQTU2ltcGxlVGFsay5NZW51SXRlbQIAAAAJBAAAAAkFAAAACQYAAAAKBQQAAAATU2ltcGxlVGFsay5NZW51SXRlbQQAAAAMbV9DaGlsZENvdW50Cm1fU2VsZWN0ZWQHbV9UaXRsZQVtX1VybAAAAQEIAQIAAAAAAAAAAAYHAAAACFNRTCBIb21lBggAAAAfaHR0cDovL3d3dy5zaW1wbGUtdGFsay5jb20vc3FsLwEFAAAABAAAAAAAAAAABgkAAAAXRGF0YWJhc2UgQWRtaW5pc3RyYXRpb24GCgAAADdodHRwOi8vd3d3LnNpbXBsZS10YWxrLmNvbS9zcWwvZGF0YWJhc2UtYWRtaW5pc3RyYXRpb24vAQYAAAAEAAAAAAAAAAAGCwAAADJTUUwgU2VydmVyIERhdGFiYXNlIEdyb3d0aCBhbmQgQXV0b2dyb3d0aCBTZXR0aW5ncwYMAAAAAAtk" 
+type="hidden"></DIV>
+<SCRIPT type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</SCRIPT>
+
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/WebResourceCAFVJOZV.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/ScriptResource.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/ScriptResource(1).js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/ScriptResource(2).js"></SCRIPT>
+
+<SCRIPT type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</SCRIPT>
+
+<SCRIPT type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', document.getElementById('aspnetForm'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls([], [], [], 90);
+//]]>
+</SCRIPT>
+
+<SCRIPT language="javascript" type="text/javascript">
+        function EndRequestHandler()
+        {
+            if (theForm._initialAction == undefined)
+                theForm._initialAction = theForm.action;
+            else
+                theForm.action = theForm._initialAction;
+        }
+        if( typeof(Sys) != "undefined" )
+        {
+            EndRequestHandler();
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+        }
+    </SCRIPT>
+
+<DIV class="site">
+<DIV class="page">
+<DIV class="header">
+<DIV class="search">
+<DIV class="redgate"><A href="http://www.red-gate.com/?utm_source=simpletalk&amp;utm_medium=textad&amp;utm_campaign=homepage"><IMG 
+alt="A service from Red Gate" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/aservicefromredgate.gif" 
+width="133" height="16"></A></DIV>
+<DIV class="searchform">
+<TABLE align="right">
+  <TBODY>
+  <TR>
+    <TD><INPUT onkeydown="return(siteSearch(event,'http://www.simple-talk.com/search/default.aspx','search','ctl00_txtSearch'));" 
+      id="ctl00_txtSearch" class="txtSearch" name="ctl00$txtSearch" 
+    type="text"></TD>
+    <TD><INPUT style="border-width: 0px;" id="ctl00_btnSearch" class="btnSearch" 
+      onmouseover="btnSearchOver();" onmouseout="btnSearchOut();" onclick="return(doSiteSearch('http://www.simple-talk.com/search/default.aspx','search','ctl00_txtSearch'));WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$btnSearch&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" 
+      name="ctl00$btnSearch" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/btn_search_56x19.gif" 
+      type="image"></TD></TR></TBODY></TABLE></DIV></DIV>
+<DIV class="logo"><A id="ctl00_lnkGotoHome" href="http://www.simple-talk.com/default.aspx"><IMG 
+src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="250" height="55"></A></DIV></DIV>
+<DIV class="mainnav">
+<DIV class="primarynav"><A id="ctl00_Navigation1_lnkGotoHome" href="http://www.simple-talk.com/default.aspx">Home</A><A 
+id="ctl00_Navigation1_lnkGotoSql" class="on" href="http://www.simple-talk.com/sql/">SQL</A><A 
+id="ctl00_Navigation1_lnkGotoNet" 
+href="http://www.simple-talk.com/dotnet/">.NET</A><A id="ctl00_Navigation1_lnkGotoExchange" 
+href="http://www.simple-talk.com/sysadmin/">SysAdmin</A><A id="ctl00_Navigation1_lnkGotoOpinion" 
+href="http://www.simple-talk.com/opinion/">Opinion</A><A id="ctl00_Navigation1_lnkGotoBlogs" 
+href="http://www.simple-talk.com/community/blogs/">Blogs</A><A id="ctl00_Navigation1_lnkGotoForums" 
+href="http://www.simple-talk.com/community/forums/">Forums</A><A id="ctl00_Navigation1_lnkGotoBooks" 
+href="http://www.simple-talk.com/books/">Books</A></DIV>
+<DIV class="membernav"><SPAN id="ctl00_Navigation1_panAnonymous"><A id="ctl00_Navigation1_lnkLogin" 
+href="http://www.simple-talk.com/community/login.aspx?ReturnUrl=%2fsql%2fdatabase-administration%2fsql-server-database-growth-and-autogrowth-settings%2f%3futm_source%3dsimpletalk%26utm_medium%3demail-main%26utm_content%3dautogrowth-20111128%26utm_campaign%3dSQL">Sign 
+in</A>            &nbsp;|&nbsp;<A id="ctl00_Navigation1_lnkJoin" href="http://www.simple-talk.com/community/user/CreateUser.aspx?ReturnUrl=%2fsql%2fdatabase-administration%2fsql-server-database-growth-and-autogrowth-settings%2f%3futm_source%3dsimpletalk%26utm_medium%3demail-main%26utm_content%3dautogrowth-20111128%26utm_campaign%3dSQL">Join</A></SPAN> 
+       &nbsp;|&nbsp;<A id="ctl00_Navigation1_lnkHelp" href="http://www.simple-talk.com/community/languages/en-US/docs/faq.aspx">Help</A></DIV>
+</DIV>
+<DIV class="subnav"><A id="ctl00_Navigation1_repSubMenu_ctl00_lnkItem" href="http://www.simple-talk.com/sql/">SQL 
+Home</A>        &nbsp;&gt;&nbsp;            <A id="ctl00_Navigation1_repSubMenu_ctl02_lnkItem" 
+href="http://www.simple-talk.com/sql/database-administration/">Database 
+Administration</A>        &nbsp;&gt;&nbsp;            <SPAN>SQL Server Database 
+Growth and Autogrowth Settings</SPAN></DIV>
+<DIV class="maincontent">
+<DIV class="article">
+<DIV id="ctl00_MainContent_panSummary" class="summarybox">
+<DIV class="header"></DIV>
+<DIV class="middle">
+<DIV class="summaryboxcontent">          Av rating: <IMG style="border-width: 0px; width: 70px; height: 13px;" 
+id="ctl00_MainContent_imgRating1" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_sql_5star_70x13.gif"><BR>
+		  Total votes: 4<BR>		  Total comments: 1        </DIV>
+<DIV class="summaryboxlines"><IMG style="border-width: 0px; width: 176px; height: 3px;" 
+id="ctl00_MainContent_imgLines" src=""></DIV>
+<DIV class="summaryboxcontent2"><IMG style="border-width: 0px; width: 14px; height: 11px;" 
+id="ctl00_MainContent_imgEmail" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_sql_email_13x11.gif">&nbsp;<A 
+id="ctl00_MainContent_lnkEmail" href="http://www.simple-talk.com/content/email.aspx?article=1395">send 
+to a friend</A><BR><IMG style="border-width: 0px; width: 14px; height: 11px;" 
+id="ctl00_MainContent_imgPrint" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_sql_print_13x11.gif">&nbsp;<A 
+id="ctl00_MainContent_lnkPrint" href="http://www.simple-talk.com/content/print.aspx?article=1395" 
+target="_blank">printer friendly version</A><BR></DIV></DIV>
+<DIV class="footer"></DIV></DIV><BR><BR><IMG style="border-width: 0px;" id="ctl00_MainContent_imgAuthor" 
+class="authorpicture" alt="Greg Larsen" align="left" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/60.jpg">
+<DIV class="articletitle">SQL Server Database Growth and Autogrowth 
+Settings</DIV>
+<DIV class="date">23 November 2011</DIV>
+<DIV class="author">by <A id="ctl00_MainContent_lnkAuthor" href="http://www.simple-talk.com/author/greg-larsen/" 
+rel="author">Greg Larsen</A></DIV>
+<DIV class="clear"></DIV>
+<STYLE type="text/css">#pretty {
+	
+}
+#pretty .codeblue {
+	COLOR: blue
+}
+#pretty .codebrown {
+	COLOR: brown
+}
+#pretty .tablecontents {
+	FONT-SIZE: 13px; FONT-WEIGHT: bold
+}
+#pretty .codedarkred {
+	COLOR: darkred
+}
+#pretty .codegray {
+	COLOR: gray
+}
+#pretty .codegreen {
+	COLOR: green
+}
+#pretty .codemagenta {
+	COLOR: magenta
+}
+#pretty .codered {
+	COLOR: red
+}
+#pretty .indented {
+	MARGIN-LEFT: 80px
+}
+#pretty BLOCKQUOTE {
+	TEXT-ALIGN: justify; FONT-STYLE: italic; FONT-FAMILY: Arial, Helvetica, sans-serif; MARGIN-LEFT: 50px; FONT-SIZE: 12px; MARGIN-RIGHT: 50px
+}
+#pretty BLOCKQUOTE DIV.listing {
+	BORDER-BOTTOM: 0px; TEXT-ALIGN: left; BORDER-LEFT: 0px; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: white; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; FONT-FAMILY: "Courier New", Courier, monospace; MARGIN-LEFT: 20px; FONT-SIZE: 11px; BORDER-TOP: 0px; FONT-WEIGHT: normal; BORDER-RIGHT: 0px; PADDING-TOP: 10px
+}
+#pretty DD {
+	MARGIN-TOP: 10px; MARGIN-LEFT: 170px
+}
+#pretty DIV.code {
+	BORDER-BOTTOM: silver 1px solid; TEXT-ALIGN: left; BORDER-LEFT: silver 1px solid; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: #f5f5f5; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; FONT-FAMILY: "Courier New", Courier, monospace; MARGIN-LEFT: 0px; FONT-SIZE: 12px; BORDER-TOP: silver 1px solid; BORDER-RIGHT: silver 1px solid; PADDING-TOP: 10px
+}
+#pretty DIV.illustration {
+	MARGIN-BOTTOM: 20px
+}
+#pretty DIV.indent {
+	MARGIN-LEFT: 20px
+}
+#pretty .listing {
+	BORDER-BOTTOM: #cacaca 1px solid; TEXT-ALIGN: left; BORDER-LEFT: #cacaca 1px solid; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: #f9f9f9; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; FONT-FAMILY: "Courier New", Courier, monospace; MARGIN-LEFT: 20px; FONT-SIZE: 11px; BORDER-TOP: #cacaca 1px solid; FONT-WEIGHT: normal; BORDER-RIGHT: #cacaca 1px solid; PADDING-TOP: 10px
+}
+#pretty DIV.listing P {
+	TEXT-ALIGN: left; PADDING-BOTTOM: 0px; MARGIN-TOP: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT-FAMILY: "Courier New", Courier, monospace; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px; FONT-SIZE: 11px; PADDING-TOP: 0px
+}
+#pretty DIV.note {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: gray 2.25pt solid; PADDING-BOTTOM: 0in; PADDING-LEFT: 6pt; PADDING-RIGHT: 0in; MARGIN-LEFT: 28.35pt; BORDER-TOP: medium none; MARGIN-RIGHT: 0in; BORDER-RIGHT: medium none; PADDING-TOP: 0in; MSO-ELEMENT: para-border-div
+}
+#pretty DIV.note P.note {
+	MARGIN-LEFT: 0in
+}
+#pretty DL {
+	TEXT-ALIGN: justify; FONT-FAMILY: Arial, Helvetica, sans-serif; MARGIN-LEFT: 20px; FONT-SIZE: 12px
+}
+#pretty DT {
+	MARGIN-TOP: 10px; WIDTH: 150px; FLOAT: left; CLEAR: both; FONT-WEIGHT: bold
+}
+#pretty FIELDSET {
+	BORDER-BOTTOM: #cacaca 1px solid; TEXT-ALIGN: left; BORDER-LEFT: #cacaca 1px solid; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: #f2f2f2; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; FONT-FAMILY: "Courier New", Courier, monospace; MARGIN-LEFT: 20px; FONT-SIZE: 12px; BORDER-TOP: #cacaca 1px solid; FONT-WEIGHT: normal; BORDER-RIGHT: #cacaca 1px solid; PADDING-TOP: 10px
+}
+#pretty H1 {
+	FONT-FAMILY: "Times New Roman", Times, serif; MARGIN-LEFT: 0px; FONT-SIZE: 145%
+}
+#pretty H2 {
+	FONT-FAMILY: "Times New Roman", Times, serif; MARGIN-LEFT: 20px; FONT-SIZE: 130%
+}
+#pretty H3 {
+	FONT-FAMILY: "Times New Roman", Times, serif; MARGIN-LEFT: 40px; FONT-SIZE: 115%
+}
+#pretty H4 {
+	FONT-FAMILY: "Times New Roman", Times, serif; MARGIN-LEFT: 20px
+}
+#pretty HR {
+	BORDER-BOTTOM: thin; BORDER-TOP: #d2d2d2 1px dotted
+}
+#pretty LEGEND {
+	TEXT-ALIGN: left; PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; FONT-FAMILY: "Times New Roman", Times, serif; MARGIN-LEFT: 20px; FONT-SIZE: 14px; PADDING-TOP: 10px
+}
+#pretty LI {
+	TEXT-ALIGN: justify; MARGIN-TOP: 0px; FONT-FAMILY: Arial, Helvetica, sans-serif; MARGIN-BOTTOM: 3px; MARGIN-LEFT: 20px; FONT-SIZE: 12px
+}
+#pretty P {
+	TEXT-ALIGN: justify; FONT-FAMILY: Arial, Helvetica, sans-serif; MARGIN-LEFT: 20px; FONT-SIZE: 12px
+}
+#pretty P.caption {
+	TEXT-ALIGN: left; MARGIN-TOP: 0px; MARGIN-LEFT: 20px; FONT-SIZE: 11px; FONT-WEIGHT: bold
+}
+#pretty P.illustration {
+	TEXT-ALIGN: center; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+#pretty P.note {
+	BORDER-BOTTOM: silver 1px solid; TEXT-ALIGN: left; BORDER-LEFT: silver 1px solid; PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; MARGIN-LEFT: 80px; BORDER-TOP: silver 1px solid; BORDER-RIGHT: silver 1px solid; PADDING-TOP: 10px
+}
+#pretty .pullout {
+	BORDER-BOTTOM: blue 1px solid; TEXT-ALIGN: left; BORDER-LEFT: #766b7b 1px solid; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: #fbfbfd; PADDING-LEFT: 10px; WIDTH: 350px; PADDING-RIGHT: 10px; FLOAT: right; MARGIN-LEFT: 10px; BORDER-TOP: #786d7d 1px solid; MARGIN-RIGHT: 0px; BORDER-RIGHT: #706573 1px solid; PADDING-TOP: 10px
+}
+#pretty .pullout P {
+	MARGIN-LEFT: 0px
+}
+#pretty P.quote {
+	BORDER-BOTTOM: silver 1px solid; TEXT-ALIGN: left; PADDING-BOTTOM: 15px; LINE-HEIGHT: 15px; PADDING-RIGHT: 0px; FLOAT: right; MARGIN-LEFT: 10px; FONT-SIZE: 17px; BORDER-TOP: silver 2px solid; FONT-WEIGHT: bold; MARGIN-RIGHT: 10px; BORDER-RIGHT: medium none; PADDING-TOP: 10px
+}
+#pretty P.start:first-letter {
+	LINE-HEIGHT: 100%; FLOAT: left; FONT-SIZE: 280%
+}
+#pretty PRE {
+	BORDER-BOTTOM: silver 1px solid; TEXT-ALIGN: left; BORDER-LEFT: silver 1px solid; PADDING-BOTTOM: 10px; BACKGROUND-COLOR: #f5f5f5; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; MARGIN-LEFT: 0px; BORDER-TOP: silver 1px solid; BORDER-RIGHT: silver 1px solid; PADDING-TOP: 10px
+}
+#pretty PRE.inline {
+	MARGIN-LEFT: 20px
+}
+#pretty SPAN.codeblack {
+	COLOR: black
+}
+#pretty SPAN.mono {
+	FONT-FAMILY: "Courier New", Courier, monospace; FONT-WEIGHT: bold
+}
+#pretty .monospaced {
+	
+}
+#pretty TABLE {
+	BORDER-BOTTOM: #cacaca 1px solid; BORDER-LEFT: #cacaca 1px solid; MARGIN-LEFT: 20px; BORDER-TOP: #cacaca 1px solid; BORDER-RIGHT: #cacaca 1px solid
+}
+#pretty TABLE LI {
+	TEXT-ALIGN: left; MARGIN-LEFT: 5px; FONT-SIZE: 11px
+}
+#pretty TABLE OL {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; MARGIN-LEFT: 15px; PADDING-TOP: 0px
+}
+#pretty TABLE P {
+	MARGIN: 0px 5px; FONT-SIZE: 11px
+}
+#pretty TABLE TD {
+	FONT-SIZE: 11px
+}
+#pretty TABLE UL {
+	MARGIN-LEFT: 10px
+}
+#pretty UL {
+	MARGIN-TOP: 0px
+}
+.style1 {
+	COLOR: #cc0000
+}
+.CodeInText {
+	FONT-FAMILY: courier new, courier, monospaced; FONT-WEIGHT: bold
+}
+.ImportantWords {
+	FONT-WEIGHT: bold
+}
+.ScreenText {
+	FONT-FAMILY: Century Gothic, Tahoma, Lucida Sans, sans-serif
+}
+PRE {
+	BACKGROUND-COLOR: #d6d6d6
+}
+.CodeInText {
+	FONT-FAMILY: courier new, courier, monospaced; FONT-WEIGHT: bold
+}
+.ImportantWords {
+	FONT-WEIGHT: bold
+}
+.ScreenText {
+	FONT-FAMILY: Century Gothic, Tahoma, Lucida Sans, sans-serif
+}
+PRE {
+	BACKGROUND-COLOR: #d6d6d6
+}
+</STYLE>
+
+<DIV id="pretty">
+<P class="note">It's easy to&nbsp;create a database nowadays with 
+point-'n-click, but if you've left your database's autogrowth settings at their 
+default, you may hit problems in the future. Why? What do I do about it? Read 
+on!</P>
+<P class="start">There are a lot of maintenance jobs that SQL Server performs 
+under the covers. Whilst this makes SQL Server an easier database management 
+system to administer with very little training, it has the consequence that the 
+industry has many accidental DBAs who are managing SQL Server without really 
+knowing what the database engine does behind the scene to keep their databases 
+up and running. Microsoft provides point and click actions to define a number of 
+maintenance tasks like defining databases, creating tables, backing up 
+databases, performing data integrity checks, shrinking databases, etc. Being 
+able to create these routine database administration tasks provides using point 
+and click provides the accidental DBA an easy method to quickly build 
+maintenance routines.</P>
+<P>Many of these automatic maintenance events that SQL Server handles for you 
+are controlled using configurable settings that have predetermined values which 
+might not be appropriate in all installations. As a DBA you have control to 
+override the predetermined configuration settings and you should consider 
+providing a setting that is appropriate for your situation, One of those 
+settings you should know something about is the ’auto-growth’ settings that are 
+established when you first create a database. In this article I will discuss the 
+auto-growth options for a database, and how you should use it to appropriately 
+manage your database growth. Additionally, I will provide you with some scripts 
+to help you manage your database auto-growth events.</P>
+<H2>Auto-growth</H2>
+<P>What exactly are auto-growth events? An auto-growth event is the process by 
+which the SQL Server engine expands the size of a database file when it runs out 
+of space. The amount by which a database file grows is based on the settings 
+that you have for the file growth options for your database.</P>
+<P>Each database file that is associated with your database has an auto-growth 
+setting. There are three different settings you can use to identify how your 
+database files will grow. They can grow by a specific size, a percentage of the 
+current size, or not grow at all. Additionally you can set your files to 
+unrestricted growth, which means they will keep growing as they need more space 
+or you run out of disk space. Or you can restrict the growth of a database file 
+to grow no larger than a specified size. Each one of these different auto-grow 
+setting have defaults, or you can set them for each database file.</P>
+<P>If you are not properly managing your auto-growth setting for a database, 
+then your database might experience many auto-grow events, or very few. 
+Auto-growth events. Each time an auto-growth event is performed SQL Server holds 
+up database processing while an auto-growth event occurs. This means that 
+processing against that database will be held up while the auto-growth event 
+completed. This equates to slower response time for those SQL commands that are 
+being processing against the database that is growing.</P>
+<P>When an auto-growth event occurs SQL Server needs to find additional disk 
+space in which the database can grow. Most likely this disk space will not be 
+physically right next to the existing database space, but instead will be 
+somewhere else on the disk. This causes your database file to be physically 
+fragmented on the disk. The more auto-growth events you have the more physical 
+fragmentation you will have. When your database is physically fragmented it 
+takes longer for SQL Server to read that databases, because it has to move the 
+disk head around to all the different fragmented pieces to read your database. 
+To avoid the issues associated with auto-growth events you need to minimize the 
+number of auto-growth events that occur.</P>
+<P>The default auto-growth settings for a database are rarely the ideal settings 
+for how your database should grow. If you have an idea of the growth profile of 
+your database when you first build it then you should set your auto-growth 
+properties based on those growth projections. If you don’t have any idea of how 
+fast your database will grow then you should be monitoring for auto-growth 
+events. Knowing how often your database grows will give you some ideas of the 
+growth rate of your database.</P>
+<H2>Establishing Your Auto-growth Settings When Creating a New Database</H2>
+<P>You can set database auto-growth setting by using SQL Server Management 
+Studio, scripted SMO or by using T-SQL when you create your database. You can 
+also use these methods to change the auto-growth settings of existing databases. 
+Let me first show you how to set the auto-grow settings using SQL Server 
+Management Studio when you create a database.</P>
+<P>The initial settings for auto-growth are set to the default values when 
+defining a new database. These defaults are established by using the auto-growth 
+settings on the model database files. You can see my default values on the ”New 
+Database” screen shot in Figure 1 when I am creating a new database named 
+“MyDB”. My default auto-growth setting for the data file is 1 MB with 
+unrestrictive growth, and the log file is set to grow by 10% with unrestricted 
+growth. If you haven’t tweaked your model database settings then you will have 
+the same default auto-growth setting as I do.</P>
+<P class="illustration"><A href="http://www.simple-talk.com/iwritefor/articlefiles/1395-image001.png" 
+target="_blank"><IMG alt="Setting Auto-grow settings" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1395-image001small.png"></A></P>
+<P class="caption">Figure 1: Setting Auto-grow settings using the New Database 
+dialog</P>
+<P>By clicking on the ellipses buttons, which are circled in red in Figure 1, I 
+can define auto-growth settings that make sense for the database I am creating. 
+When I click on the ellipses button the Windows dialog box in Figure 2 is 
+displayed.</P>
+<P class="illustration"><IMG alt="Options for Changing the Autogrowth settings" 
+src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1395-image002.png"></P>
+<P class="caption">Figure 2: Options for Changing the Autogrowth settings</P>
+<P>Using the dialog box shown in Figure 2 I can change my file auto-growth 
+option to any one of the three different possible values. The first option is 
+the check box at the top that says “Enable Autogrowth”. This option allows you 
+to turn on or off whether “MyDB” can auto-grow. By having this box checked I’m 
+telling SQL Server to allow this database to auto-grow. By unchecking this box 
+I’m telling SQL Server I do not want my database to auto-grow.</P>
+<P>The next option I can set is the “File Growth” option. It allows me to set 
+how my data file will grow when it runs out of space. As you can see there are 
+two radio buttons identifying whether or not you want the file to grow by a 
+percentage or in megabytes. I normally only allow my database auto-grow settings 
+to grow based on megabytes instead of a percentage; I do this because I want all 
+my auto-growth events to be of a uniform fixed size. If I was to allow them to 
+grow based on a percentage, the auto-growth amount would get bigger as my 
+database got larger. When databases are allowed to grow by a percentage the 
+amount they grow might be substantial especially for the large multi-gigabyte or 
+terabyte databases. If a large database was to grow based on a percentage it 
+most likely will take way more space then it will needs to handle growth for 
+next year, or so. This causes these large databases to be over allocated from a 
+disk space perspective. Worse yet a large database might grow so big it takes 
+all the available disk space, and we don’t want this to happen. When setting the 
+number of megabytes a new database should grow I do it based on whatever 
+information I have regarding the growth profile of the new database.</P>
+<P>The last option is the “Maximum File Size” option. This option allows me to 
+set the maximum size that SQL Server will allow my file to grow. I normally use 
+the unrestricted growth option, because I know most of my applications are well 
+behaved and are highly unlikely to grow uncontrollably. Plus using the 
+unrestricted options minimizes application failures due to auto-growth 
+restrictions. I also monitor disk space usage and auto-growth events fairly 
+close so I would most likely notice a database consuming all of my available 
+disk space. If you want to make sure no one database uses up all your disk space 
+then setting a maximum file size would be a way to prevent this.</P>
+<P>If you are using T-SQL to create a new database you can set the auto-growth 
+options on the CREATE DATABASE command. The code in Listing 1 shows how I can 
+set auto-growth option when I create a new database named 
+<EM>AnotherDB</EM>.</P>
+<DIV class="listing"><SPAN style="color: blue;">USE MASTER</SPAN><SPAN style="color: gray;">;<BR></SPAN><SPAN 
+style="color: black;">GO<BR></SPAN><SPAN style="color: blue;">CREATE DATABASE 
+</SPAN><SPAN style="color: black;">AnotherDB<BR></SPAN><SPAN style="color: blue;">ON 
+<BR></SPAN><SPAN style="color: gray;">( </SPAN><SPAN style="color: black;">NAME 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">AnotherDB_data</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: black;">FILENAME 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: red;">'C:\Program 
+Files\Microsoft SQL 
+Server\MSSQL10_50.SQL2008R2\MSSQL\DATA\AnotherDB.mdf'</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">SIZE </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">125MB</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: black;">MAXSIZE 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">500MB</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: black;">FILEGROWTH 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: black;">25MB 
+</SPAN><SPAN style="color: gray;">)<BR></SPAN><SPAN style="color: magenta;">LOG 
+</SPAN><SPAN style="color: blue;">ON<BR></SPAN><SPAN style="color: gray;">( 
+</SPAN><SPAN style="color: black;">NAME </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: black;">AnotherDB_log</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">FILENAME </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: red;">'C:\Program Files\Microsoft SQL 
+Server\MSSQL10_50.SQL2008R2\MSSQL\DATA\AnotherDB.ldf'</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">SIZE </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">5MB</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: black;">FILEGROWTH 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: black;">5MB 
+</SPAN><SPAN style="color: gray;">) ;<BR></SPAN><SPAN 
+style="color: black;">GO</SPAN> </DIV>
+<P><STRONG>Listing 1: </STRONG><STRONG>Setting 
+</STRONG><STRONG>auto-grow</STRONG><STRONG> sizes when creating database using 
+T-SQL</STRONG></P>
+<P>If you look at the code in Listing 1 you can see that I used the MAXSIZE, and 
+FILEGROWTH options of the CREATE DATABASE command to control the auto-growth 
+options of my database files. The MAXSIZE option is used to specify how large a 
+file can grow and the FILEGROWTH option is used to specify how much my file is 
+supposed to grow each time it needs to grow. The code in Listing 1 allows my 
+file “AnotherDB_data” to grow to a maximum size of 500MB in 25MB chunks. For the 
+log file “AnotherDB_log”, I allowed it to grow unrestricted, since I didn’t 
+provide a “MAXSIZE” options, but when it does grow it will grow in “5MB” 
+chunks.</P>
+<H2>Identifying Databases that are using the Default Auto-growth Settings </H2>
+<P>The default auto-grow settings associated with the installed model database 
+are not the best settings for how databases grows. If you have inherited a SQL 
+Server Instance, or haven’t been diligent at setting the auto-grow parameters 
+when you created databases then you might want scan your instance to determine 
+which databases are using the default setting.</P>
+<P>Remember now that the default settings for auto-growing for the model 
+database that is installed with SQL Server data is 1 MB for data files and 10% 
+for log files. Therefore it is a simple matter of running a T-SQL script against 
+your instance to identify those databases that are using the default auto-growth 
+settings. In Listing 2 I provide the script I use to identify databases that use 
+the default auto-growth settings.</P>
+<DIV class="listing"><SPAN style="color: green;">-- Drop temporary table if it 
+exists<BR></SPAN><SPAN style="color: blue;">IF </SPAN><SPAN style="color: magenta;">OBJECT_ID</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'tempdb..#info'</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">IS </SPAN><SPAN style="color: gray;">NOT 
+NULL<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="color: blue;">DROP TABLE </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">#info</SPAN><SPAN 
+style="color: gray;">;<BR><BR></SPAN><SPAN style="color: green;">-- Create table 
+to house database file information<BR></SPAN><SPAN style="color: blue;">CREATE 
+TABLE </SPAN><SPAN style="color: rgb(67, 67, 67);">#info </SPAN><SPAN style="color: gray;">(<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: black;">databasename </SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+,</SPAN><SPAN style="color: black;">name </SPAN><SPAN 
+style="color: blue;">VARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">128</SPAN><SPAN 
+style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN style="color: black;">fileid 
+</SPAN><SPAN style="color: blue;">INT<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">filename </SPAN><SPAN 
+style="color: blue;">VARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">1000</SPAN><SPAN 
+style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN style="color: black;">filegroup 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN 
+style="color: black;">size </SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">25</SPAN><SPAN style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN 
+style="color: black;">maxsize </SPAN><SPAN 
+style="color: blue;">VARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">25</SPAN><SPAN 
+style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN style="color: black;">growth 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">25</SPAN><SPAN style="color: gray;">)<BR>&nbsp;&nbsp;&nbsp;&nbsp;,</SPAN><SPAN 
+style="color: black;">usage </SPAN><SPAN 
+style="color: blue;">VARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">25</SPAN><SPAN 
+style="color: gray;">));<BR>&nbsp;&nbsp;&nbsp;&nbsp;<BR></SPAN><SPAN style="color: green;">-- 
+Get database file information for each database&nbsp;&nbsp; <BR></SPAN><SPAN 
+style="color: blue;">SET NOCOUNT ON</SPAN><SPAN style="color: gray;">; 
+<BR></SPAN><SPAN style="color: blue;">INSERT INTO </SPAN><SPAN style="color: rgb(67, 67, 67);">#info<BR></SPAN><SPAN 
+style="color: blue;">EXEC </SPAN><SPAN style="color: darkred;">sp_MSforeachdb 
+</SPAN><SPAN style="color: red;">'use ? <BR>select 
+''?'',name,&nbsp;&nbsp;fileid, filename,<BR>filegroup = 
+filegroup_name(groupid),<BR>''size'' = convert(nvarchar(15), convert (bigint, 
+size) * 8) + N'' KB'',<BR>''maxsize'' = (case maxsize when -1 then 
+N''Unlimited''<BR>else<BR>convert(nvarchar(15), convert (bigint, maxsize) * 8) + 
+N'' KB'' end),<BR>''growth'' = (case status &amp; 0x100000 when 0x100000 
+then<BR>convert(nvarchar(15), growth) + N''%''<BR>else<BR>convert(nvarchar(15), 
+convert (bigint, growth) * 8) + N'' KB'' end),<BR>''usage'' = (case status &amp; 
+0x40 when 0x40 then ''log only'' else ''data only'' end)<BR>from 
+sysfiles<BR>'</SPAN><SPAN style="color: gray;">;<BR><BR></SPAN><SPAN style="color: green;">-- 
+Identify database files that use default auto-grow properties<BR></SPAN><SPAN 
+style="color: blue;">SELECT </SPAN><SPAN style="color: black;">databasename 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN 
+style="color: black;">[Database 
+Name]<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">name </SPAN><SPAN 
+style="color: blue;">AS </SPAN><SPAN style="color: black;">[Logical 
+Name]<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">filename </SPAN><SPAN 
+style="color: blue;">AS </SPAN><SPAN style="color: black;">[Physical File 
+Name]<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">growth </SPAN><SPAN 
+style="color: blue;">AS </SPAN><SPAN style="color: black;">[Auto-grow Setting] 
+</SPAN><SPAN style="color: blue;">FROM </SPAN><SPAN style="color: rgb(67, 67, 67);">#info 
+<BR></SPAN><SPAN style="color: blue;">WHERE </SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">usage </SPAN><SPAN 
+style="color: blue;">= </SPAN><SPAN style="color: red;">'data only' </SPAN><SPAN 
+style="color: gray;">AND </SPAN><SPAN style="color: black;">growth </SPAN><SPAN 
+style="color: blue;">= </SPAN><SPAN style="color: red;">'1024 KB'</SPAN><SPAN 
+style="color: gray;">) <BR>&nbsp;&nbsp; OR (</SPAN><SPAN 
+style="color: black;">usage </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: red;">'log only' </SPAN><SPAN style="color: gray;">AND 
+</SPAN><SPAN style="color: black;">growth </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: red;">'10%'</SPAN><SPAN 
+style="color: gray;">)<BR></SPAN><SPAN style="color: blue;">ORDER BY 
+</SPAN><SPAN style="color: black;">databasename<BR><BR></SPAN><SPAN style="color: green;">-- 
+get rid of temp table <BR></SPAN><SPAN style="color: blue;">DROP TABLE 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">#info</SPAN><SPAN style="color: gray;">;</SPAN></DIV>
+<P class="caption">Listing 2: Identify databases that have default auto-grow 
+settings</P>
+<P>The script in listing 2 uses an undocumented system stored procedure 
+sp_MSforeachdb stored procedure to get the auto-growth setting from the 
+<EM>sysfiles</EM> system table within each database, and store that information 
+into a temporary table. Note the sp_MSforeachdb system store procedure has a bug 
+in the code that causes it to sometime to not process through each and every 
+database. Aaron Bertrand has noted this bug in his blog and has identified 
+alternative method for processing through all databases with a T-SQL script: <A 
+href="http://sqlblog.com/blogs/aaron_bertrand/archive/2010/02/08/bad-habits-to-kick-relying-on-undocumented-behavior.aspx" 
+target="_blank">http://sqlblog.com/blogs/aaron_bertrand/archive/2010/02/08/bad-habits-to-kick-relying-on-undocumented-behavior.aspx</A>. 
+If you really want to make sure this code doesn’t randomly skip databases then I 
+would suggest you implement a solution similar to solution to the one that 
+Aaron’s documented in the link above when processing through your databases. For 
+the case of displaying databases that are using the default auto-grow settings 
+doing this is not critical but you still might miss databases.</P>
+<H2>Changing the Auto-grow settings of an Existing Database</H2>
+<P>Like most SQL Server settings, you can change them using either SQL Server 
+Management Studio GUI tool, a script using SMO, or you can write T-SQL to modify 
+them. To change the auto-growth setting in SQL Server Management Studio, first 
+right click on the database for which you want to change the auto-growth 
+settings and then click on the “Properties” item in the menu that is displayed. 
+This will bring up the “Database Properties” dialog box for the database you 
+selected. Next click on the “Files” item in the left pane under the “Select a 
+page” section, this will display the database file information in the right 
+pane. To get to the window where you can actually change the auto-growth 
+setting, click on the button containing the 3 dots (“…”) or commonly referred to 
+as the ellipses button. That will bring up the “Change Autogrowth…” window as 
+seen in Figure 2. In the “Change Autogrowth…” window you can change the 
+auto-grow settings for your database, just like you would when you create a 
+database using SQL Server Management Studio. In Listing 3 I have provided a SQL 
+statement that changes the FILEGROWTH settings for a database named “MyDB”.</P>
+<DIV class="listing"><SPAN style="color: blue;">ALTER DATABASE </SPAN><SPAN 
+style="color: black;">MyDB<BR>&nbsp;&nbsp;MODIFY </SPAN><SPAN style="color: blue;">FILE<BR>&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">NAME</SPAN><SPAN style="color: blue;">=</SPAN><SPAN 
+style="color: black;">MyDB_Log</SPAN><SPAN style="color: gray;">,</SPAN><SPAN 
+style="color: black;">FILEGROWTH</SPAN><SPAN style="color: blue;">=</SPAN><SPAN 
+style="color: black;">20MB</SPAN><SPAN style="color: gray;">);</SPAN></DIV>
+<P class="caption">Listing 3: Change the Auto-growth setting using T-SQL </P>
+<P>In the ALTER DATABASE statement in Listing 3 I set FILEGROWTH size of the 
+transaction log file named “MyDB_Log” in database MyDB to 20 MBs. You can use 
+the ALTER DATABASE MODIFY FILE option to set the auto-growth numbers for any one 
+of the files (DATA and/or transaction Log) associated with a database.</P>
+<H2>Identifying How Often an Auto-growth Event has Occurred</H2>
+<P>When SQL Server performs an auto-grow event, the transaction that triggered 
+the auto-grow event will have to wait until the auto-grow event completes before 
+the transaction can finish. These auto-growth events cause your performance to 
+degrade a little when an auto-grow event is taking place. For this reason it is 
+best if you can size your database appropriately so auto-growth events rarely 
+occur.</P>
+<P>If you are interested in how often an auto-growth event occurs on your system 
+you can capture those events using a trace. By knowing which databases are 
+performing auto-growth events allows you to adjust those database file growth 
+properties so they will perform auto-growth events less frequently. You can use 
+the profiler “Data File Auto-grow” and/or the “Log File Auto-grow” events to 
+track these database auto-growth events. If you are running SQL Server 2005 or 
+above, both these auto-grow events are already being captured by the default 
+trace. If you haven’t turned off the default trace then you can use the default 
+trace file to find these auto-grow events. If you have turned off the default 
+trace you can either enable it, or setup a new profiler trace to capture the 
+“Data File Auto-grow” and “Log File Auto-grow” events.</P>
+<P>The default trace logs to a file. I have provided the code in Listing 4 to 
+show you how to extract all the auto-growth events from the default trace files. 
+If you create your own profiler trace session to capture these auto-grow events 
+then you will need to modify this script to meet your profiler trace 
+settings.</P>
+<DIV class="listing"><SPAN style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@filename 
+</SPAN><SPAN style="color: blue;">NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">);<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@bc 
+</SPAN><SPAN style="color: blue;">INT</SPAN><SPAN 
+style="color: gray;">;<BR></SPAN><SPAN style="color: blue;">DECLARE </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec </SPAN><SPAN 
+style="color: blue;">INT</SPAN><SPAN style="color: gray;">;<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@bfn 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">);<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@efn 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">10</SPAN><SPAN style="color: gray;">);<BR><BR></SPAN><SPAN 
+style="color: green;">-- Get the name of the current default 
+trace<BR></SPAN><SPAN style="color: blue;">SELECT </SPAN><SPAN style="color: rgb(67, 67, 67);">@filename 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: magenta;">CAST</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">value </SPAN><SPAN style="color: blue;">AS 
+NVARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">1000</SPAN><SPAN style="color: gray;">))<BR></SPAN><SPAN 
+style="color: blue;">FROM </SPAN><SPAN style="color: gray;">::</SPAN><SPAN 
+style="color: darkred;">fn_trace_getinfo</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: blue;">DEFAULT</SPAN><SPAN 
+style="color: gray;">)<BR></SPAN><SPAN style="color: blue;">WHERE </SPAN><SPAN 
+style="color: black;">traceid </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">1 </SPAN><SPAN style="color: gray;">AND </SPAN><SPAN 
+style="color: black;">property </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">2</SPAN><SPAN style="color: gray;">;<BR><BR></SPAN><SPAN 
+style="color: green;">-- rip apart file name into pieces<BR></SPAN><SPAN style="color: blue;">SET 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: magenta;">REVERSE</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">);<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bc </SPAN><SPAN style="color: blue;">= 
+CHARINDEX</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'.'</SPAN><SPAN style="color: gray;">,</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">);<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec </SPAN><SPAN style="color: blue;">= 
+CHARINDEX</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'_'</SPAN><SPAN style="color: gray;">,</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">)+</SPAN><SPAN style="color: black;">1</SPAN><SPAN style="color: gray;">;<BR></SPAN><SPAN 
+style="color: blue;">SET </SPAN><SPAN style="color: rgb(67, 67, 67);">@efn 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: magenta;">REVERSE</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SUBSTRING</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">1</SPAN><SPAN style="color: gray;">,</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bc</SPAN><SPAN 
+style="color: gray;">));<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bfn </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: magenta;">REVERSE</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: magenta;">SUBSTRING</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: magenta;">LEN</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">)));<BR><BR></SPAN><SPAN style="color: green;">-- set 
+filename without rollover number<BR></SPAN><SPAN style="color: blue;">SET 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@bfn </SPAN><SPAN style="color: gray;">+ 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@efn<BR><BR></SPAN><SPAN style="color: green;">-- 
+process all trace files<BR></SPAN><SPAN style="color: blue;">SELECT 
+<BR>&nbsp;&nbsp;</SPAN><SPAN style="color: black;">ftg.StartTime<BR></SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">te.name </SPAN><SPAN 
+style="color: blue;">AS </SPAN><SPAN 
+style="color: black;">EventName<BR></SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: magenta;">DB_NAME</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: black;">ftg.databaseid</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN 
+style="color: black;">DatabaseName&nbsp;&nbsp;<BR></SPAN><SPAN style="color: gray;">,</SPAN><SPAN 
+style="color: black;">ftg.Filename<BR></SPAN><SPAN 
+style="color: gray;">,(</SPAN><SPAN 
+style="color: black;">ftg.IntegerData</SPAN><SPAN 
+style="color: gray;">*</SPAN><SPAN style="color: black;">8</SPAN><SPAN style="color: gray;">)/</SPAN><SPAN 
+style="color: black;">1024.0 </SPAN><SPAN style="color: blue;">AS </SPAN><SPAN 
+style="color: black;">GrowthMB <BR></SPAN><SPAN 
+style="color: gray;">,(</SPAN><SPAN 
+style="color: black;">ftg.duration</SPAN><SPAN 
+style="color: gray;">/</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">)</SPAN><SPAN 
+style="color: blue;">AS </SPAN><SPAN style="color: black;">DurMS<BR></SPAN><SPAN 
+style="color: blue;">FROM </SPAN><SPAN style="color: gray;">::</SPAN><SPAN 
+style="color: darkred;">fn_trace_gettable</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN style="color: gray;">, 
+</SPAN><SPAN style="color: blue;">DEFAULT</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN style="color: black;">ftg 
+<BR></SPAN><SPAN style="color: blue;">INNER JOIN </SPAN><SPAN style="color: black;">sys.trace_events 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN style="color: black;">te 
+</SPAN><SPAN style="color: blue;">ON </SPAN><SPAN 
+style="color: black;">ftg.EventClass </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: black;">te.trace_event_id&nbsp;&nbsp;<BR></SPAN><SPAN 
+style="color: blue;">WHERE </SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">ftg.EventClass </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: black;">92&nbsp;&nbsp;</SPAN><SPAN style="color: green;">-- 
+Date File Auto-grow<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">OR </SPAN><SPAN style="color: black;">ftg.EventClass 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">93</SPAN><SPAN style="color: gray;">) </SPAN><SPAN style="color: green;">-- 
+Log File Auto-grow<BR></SPAN><SPAN style="color: blue;">ORDER BY </SPAN><SPAN 
+style="color: black;">ftg.StartTime</SPAN></DIV>
+<P class="caption">Listing 4: Display Auto-growth Events Contained in the 
+Default Trace files</P>
+<P>The code in Listing 4 identifies the name of the current trace file by using 
+the fn_trace_getinfo function. Since the default trace might have multiple 
+rollover files, I have to rip apart the file name so I can get the file name 
+without the rollover number included. The code then passes the file name to the 
+fn_trace_gettable function to return the profiler trace information from all the 
+different rollover trace files. By using the output produced by this code you 
+can identify what databases have had auto-growth events and when those 
+auto-growth events have occurred. If this code doesn’t produce any auto-growth 
+events then that means your instance doesn’t have any auto-growth events 
+captured in the existing default trace files. In Report 1 I have provided a 
+sample of the output produced by the code in Listing 4.</P>
+<DIV class="listing" align="center" width="600px"><SPAN 
+style="color: black;">StartTime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+EventName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DatabaseName&nbsp;&nbsp;Filename&nbsp;&nbsp;&nbsp;&nbsp;GrowthMB&nbsp;&nbsp;DurMS<BR></SPAN><SPAN 
+style="color: black;">----------------------- ---------------------- 
+------------- ----------- --------- -----<BR></SPAN><SPAN 
+style="color: black;">2011</SPAN><SPAN style="color: gray;">-</SPAN><SPAN style="color: black;">10</SPAN><SPAN 
+style="color: gray;">-</SPAN><SPAN style="color: black;">21 20</SPAN><SPAN 
+style="color: gray;">:</SPAN><SPAN style="color: black;">01</SPAN><SPAN style="color: gray;">:</SPAN><SPAN 
+style="color: black;">00.483 </SPAN><SPAN style="color: black;">LOG </SPAN><SPAN 
+style="color: black;">FILE </SPAN><SPAN style="color: black;">Auto</SPAN><SPAN 
+style="color: gray;">-</SPAN><SPAN 
+style="color: black;">grow&nbsp;&nbsp;&nbsp;&nbsp; 
+tempdb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;templog&nbsp;&nbsp;&nbsp;&nbsp; 
+0.312500&nbsp;&nbsp;10<BR>2011</SPAN><SPAN style="color: gray;">-</SPAN><SPAN 
+style="color: black;">10</SPAN><SPAN style="color: gray;">-</SPAN><SPAN style="color: black;">28 
+10</SPAN><SPAN style="color: gray;">:</SPAN><SPAN 
+style="color: black;">33</SPAN><SPAN style="color: gray;">:</SPAN><SPAN style="color: black;">41.343 
+Data </SPAN><SPAN style="color: black;">FILE </SPAN><SPAN 
+style="color: black;">Auto</SPAN><SPAN style="color: gray;">-</SPAN><SPAN style="color: black;">grow&nbsp;&nbsp;&nbsp;&nbsp;VNIK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VNIK_Data&nbsp;&nbsp; 
+0.250000&nbsp;&nbsp;26<BR>2011</SPAN><SPAN style="color: gray;">-</SPAN><SPAN 
+style="color: black;">10</SPAN><SPAN style="color: gray;">-</SPAN><SPAN style="color: black;">30 
+17</SPAN><SPAN style="color: gray;">:</SPAN><SPAN 
+style="color: black;">00</SPAN><SPAN style="color: gray;">:</SPAN><SPAN style="color: black;">50.703 
+Data </SPAN><SPAN style="color: black;">FILE </SPAN><SPAN 
+style="color: black;">Auto</SPAN><SPAN style="color: gray;">-</SPAN><SPAN style="color: black;">grow&nbsp;&nbsp;&nbsp;&nbsp;PERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERS_Data&nbsp;&nbsp; 
+1.000000&nbsp;&nbsp;26</SPAN> </DIV>
+<P class="caption">Report 1: Sample Output of the Data and Log Auto-growth 
+Events</P>
+<P>If you really want to keep a close eye on your auto-growth events you could 
+create a SQL Agent job that sends you email about recent auto-growth events. The 
+SQL Agent job could be run as a routine, and should execute some code similar to 
+the code in Listing 4 that would show all auto-growth events since the last time 
+the SQL Agent job ran. In Listing 5, I’ve provided a sample of some code that 
+you could put in your SQL Agent job.</P>
+<DIV class="listing"><SPAN style="color: green;">-- This script will email DBA 
+if a auto-grow event occurred in the last day<BR>-- Written by: Greg Larsen 
+<BR>-- Date: 10/06/2011<BR><BR></SPAN><SPAN style="color: blue;">DECLARE 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">);<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@bc 
+</SPAN><SPAN style="color: blue;">INT</SPAN><SPAN 
+style="color: gray;">;<BR></SPAN><SPAN style="color: blue;">DECLARE </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec </SPAN><SPAN 
+style="color: blue;">INT</SPAN><SPAN style="color: gray;">;<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@bfn 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">);<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@efn 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">10</SPAN><SPAN style="color: gray;">);<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN style="color: rgb(67, 67, 67);">@DL 
+</SPAN><SPAN style="color: blue;">VARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">); 
+</SPAN><SPAN style="color: green;">-- email distribution list<BR></SPAN><SPAN 
+style="color: blue;">DECLARE </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ReportHTML&nbsp;&nbsp;</SPAN><SPAN style="color: blue;">NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: magenta;">MAX</SPAN><SPAN 
+style="color: gray;">);<BR></SPAN><SPAN style="color: blue;">DECLARE 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@Subject </SPAN><SPAN style="color: blue;">NVARCHAR 
+</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">250</SPAN><SPAN 
+style="color: gray;">);<BR><BR></SPAN><SPAN style="color: green;">-- Set email 
+distrubution list value<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@DL </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN 
+style="color: red;">'greg.larsen@simple-talk.com'<BR><BR></SPAN><SPAN style="color: green;">-- 
+Get the name of the current default trace<BR></SPAN><SPAN 
+style="color: blue;">SELECT </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: magenta;">CAST</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">value </SPAN><SPAN 
+style="color: blue;">AS NVARCHAR</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">1000</SPAN><SPAN style="color: gray;">))<BR></SPAN><SPAN 
+style="color: blue;">FROM </SPAN><SPAN style="color: gray;">::</SPAN><SPAN 
+style="color: darkred;">fn_trace_getinfo</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: blue;">DEFAULT</SPAN><SPAN 
+style="color: gray;">)<BR></SPAN><SPAN style="color: blue;">WHERE </SPAN><SPAN 
+style="color: black;">traceid </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">1 </SPAN><SPAN style="color: gray;">AND </SPAN><SPAN 
+style="color: black;">property </SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">2</SPAN><SPAN style="color: gray;">;<BR><BR></SPAN><SPAN 
+style="color: green;">-- rip apart file name into pieces<BR></SPAN><SPAN style="color: blue;">SET 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: magenta;">REVERSE</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">);<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bc </SPAN><SPAN style="color: blue;">= 
+CHARINDEX</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'.'</SPAN><SPAN style="color: gray;">,</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">);<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec </SPAN><SPAN style="color: blue;">= 
+CHARINDEX</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'_'</SPAN><SPAN style="color: gray;">,</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">)+</SPAN><SPAN style="color: black;">1</SPAN><SPAN style="color: gray;">;<BR></SPAN><SPAN 
+style="color: blue;">SET </SPAN><SPAN style="color: rgb(67, 67, 67);">@efn 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: magenta;">REVERSE</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SUBSTRING</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: black;">1</SPAN><SPAN style="color: gray;">,</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bc</SPAN><SPAN 
+style="color: gray;">));<BR></SPAN><SPAN style="color: blue;">SET </SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@bfn </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: magenta;">REVERSE</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: magenta;">SUBSTRING</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@ec</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: magenta;">LEN</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN 
+style="color: gray;">)));<BR><BR></SPAN><SPAN style="color: green;">-- set 
+filename without rollover number<BR></SPAN><SPAN style="color: blue;">SET 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@filename </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@bfn </SPAN><SPAN style="color: gray;">+ 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@efn<BR><BR></SPAN><SPAN style="color: green;">-- 
+Any Events Occur in the last day<BR></SPAN><SPAN style="color: blue;">IF 
+</SPAN><SPAN style="color: gray;">EXISTS (</SPAN><SPAN 
+style="color: blue;">SELECT </SPAN><SPAN 
+style="color: gray;">*<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: blue;">FROM </SPAN><SPAN 
+style="color: gray;">::</SPAN><SPAN 
+style="color: darkred;">fn_trace_gettable</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN style="color: gray;">, 
+</SPAN><SPAN style="color: blue;">DEFAULT</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN style="color: black;">ftg 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: blue;">WHERE </SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">EventClass </SPAN><SPAN 
+style="color: blue;">= </SPAN><SPAN 
+style="color: black;">92&nbsp;&nbsp;</SPAN><SPAN style="color: green;">-- Date 
+File 
+Auto-grow<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: gray;">OR </SPAN><SPAN 
+style="color: black;">EventClass </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: black;">93</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: green;">-- Log File 
+Auto-grow<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">AND </SPAN><SPAN style="color: black;">StartTime 
+</SPAN><SPAN style="color: gray;">&gt; </SPAN><SPAN 
+style="color: magenta;">DATEADD</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">dy</SPAN><SPAN style="color: gray;">,-</SPAN><SPAN style="color: black;">1</SPAN><SPAN 
+style="color: gray;">,</SPAN><SPAN style="color: magenta;">GETDATE</SPAN><SPAN 
+style="color: gray;">())) <BR></SPAN><SPAN style="color: blue;">BEGIN 
+</SPAN><SPAN style="color: green;">-- If there are autogrows in the last day 
+<BR>&nbsp;&nbsp;</SPAN><SPAN style="color: blue;">SET </SPAN><SPAN style="color: rgb(67, 67, 67);">@ReportHTML 
+</SPAN><SPAN style="color: blue;">=<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: red;">N'&lt;H1&gt;' </SPAN><SPAN style="color: gray;">+ 
+</SPAN><SPAN style="color: red;">N'Auto-grow Events for ' </SPAN><SPAN style="color: gray;">+ 
+<BR>&nbsp;&nbsp; </SPAN><SPAN style="color: magenta;">CAST</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: red;">'MachineName'</SPAN><SPAN 
+style="color: gray;">) </SPAN><SPAN style="color: blue;">AS NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)) 
++ <BR>&nbsp;&nbsp;&nbsp;&nbsp;+ </SPAN><SPAN style="color: magenta;">CASE 
+</SPAN><SPAN style="color: blue;">WHEN </SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'InstanceName'</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">IS </SPAN><SPAN style="color: gray;">NULL 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="color: blue;">THEN </SPAN><SPAN 
+style="color: red;">''&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: blue;">ELSE </SPAN><SPAN style="color: red;">N'\' 
+</SPAN><SPAN style="color: gray;">+&nbsp;&nbsp;</SPAN><SPAN style="color: magenta;">CAST</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'InstanceName'</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)) 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: blue;">END 
+</SPAN><SPAN style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: red;">N'&lt;/H1&gt;' </SPAN><SPAN 
+style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: red;">N'&lt;table 
+border="1"&gt;' </SPAN><SPAN 
+style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: red;">N'&lt;tr&gt;&lt;th&gt;Start 
+Time&lt;/th&gt;&lt;th&gt;Event Name&lt;/th&gt;' </SPAN><SPAN style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: red;">N'&lt;th&gt;Database Name&lt;/th&gt;&lt;th&gt;File 
+Name&lt;/th&gt;&lt;th&gt;Growth in MB&lt;/th&gt;' </SPAN><SPAN style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: red;">N'&lt;th&gt;Duration in MS&lt;/th&gt;&lt;/tr&gt;' 
+</SPAN><SPAN style="color: gray;">+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: magenta;">CAST</SPAN><SPAN style="color: gray;">((</SPAN><SPAN 
+style="color: blue;">SELECT 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: black;">ftg.StartTime</SPAN><SPAN 
+style="color: gray;">, </SPAN><SPAN style="color: red;">''</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: black;">te.name</SPAN><SPAN 
+style="color: gray;">, </SPAN><SPAN style="color: red;">''</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: magenta;">DB_NAME</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: black;">ftg.databaseid</SPAN><SPAN style="color: gray;">), 
+</SPAN><SPAN style="color: red;">''</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: black;">Filename</SPAN><SPAN 
+style="color: gray;">, </SPAN><SPAN style="color: red;">''</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">=</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">ftg.IntegerData</SPAN><SPAN 
+style="color: gray;">*</SPAN><SPAN style="color: black;">8</SPAN><SPAN style="color: gray;">)/</SPAN><SPAN 
+style="color: black;">1024.0</SPAN><SPAN style="color: gray;">, </SPAN><SPAN 
+style="color: red;">''</SPAN><SPAN style="color: gray;">, 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: black;">td </SPAN><SPAN style="color: blue;">= </SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">ftg.duration</SPAN><SPAN 
+style="color: gray;">/</SPAN><SPAN style="color: black;">1000</SPAN><SPAN style="color: gray;">) 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">FROM </SPAN><SPAN style="color: gray;">::</SPAN><SPAN 
+style="color: darkred;">fn_trace_gettable</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@filename</SPAN><SPAN style="color: gray;">, 
+</SPAN><SPAN style="color: blue;">DEFAULT</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS </SPAN><SPAN style="color: black;">ftg 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: blue;">INNER JOIN </SPAN><SPAN 
+style="color: black;">sys.trace_events </SPAN><SPAN style="color: blue;">AS 
+</SPAN><SPAN style="color: black;">te </SPAN><SPAN style="color: blue;">ON 
+</SPAN><SPAN style="color: black;">ftg.EventClass </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN 
+style="color: black;">te.trace_event_id&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">WHERE </SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: black;">EventClass </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: black;">92&nbsp;&nbsp;</SPAN><SPAN style="color: green;">-- 
+Date File 
+Auto-grow<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">OR </SPAN><SPAN style="color: black;">EventClass 
+</SPAN><SPAN style="color: blue;">= </SPAN><SPAN 
+style="color: black;">93</SPAN><SPAN style="color: gray;">) </SPAN><SPAN style="color: green;">-- 
+Log File Auto-grow 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: gray;">AND </SPAN><SPAN 
+style="color: black;">StartTime </SPAN><SPAN style="color: gray;">&gt; 
+</SPAN><SPAN style="color: magenta;">DATEADD</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">dy</SPAN><SPAN style="color: gray;">,-</SPAN><SPAN 
+style="color: black;">1</SPAN><SPAN style="color: gray;">,</SPAN><SPAN style="color: magenta;">GETDATE</SPAN><SPAN 
+style="color: gray;">()) </SPAN><SPAN style="color: green;">-- Less than 1 day 
+ago<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">ORDER BY </SPAN><SPAN 
+style="color: black;">StartTime&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">FOR XML </SPAN><SPAN style="color: black;">PATH</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: red;">'tr'</SPAN><SPAN style="color: gray;">), 
+</SPAN><SPAN style="color: blue;">TYPE <BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: gray;">) </SPAN><SPAN style="color: blue;">AS NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: magenta;">MAX</SPAN><SPAN 
+style="color: gray;">) ) +<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: red;">N'&lt;/table&gt;' 
+</SPAN><SPAN 
+style="color: gray;">;<BR>&nbsp;&nbsp;&nbsp;&nbsp;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: green;">-- Build the subject line with server and instance 
+name<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: blue;">SET 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@Subject </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: red;">'Auto-grow Events in Last Day ' </SPAN><SPAN 
+style="color: gray;">+ 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: magenta;">CAST</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: red;">'MachineName'</SPAN><SPAN 
+style="color: gray;">) </SPAN><SPAN style="color: blue;">AS NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)) 
++ 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
++ </SPAN><SPAN style="color: magenta;">CASE </SPAN><SPAN 
+style="color: blue;">WHEN </SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'InstanceName'</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">IS </SPAN><SPAN style="color: gray;">NULL 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">THEN </SPAN><SPAN 
+style="color: red;">''&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="color: blue;">ELSE </SPAN><SPAN style="color: red;">N'\' </SPAN><SPAN 
+style="color: gray;">+&nbsp;&nbsp;</SPAN><SPAN 
+style="color: magenta;">CAST</SPAN><SPAN style="color: gray;">(</SPAN><SPAN 
+style="color: magenta;">SERVERPROPERTY</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN 
+style="color: red;">'InstanceName'</SPAN><SPAN style="color: gray;">) 
+</SPAN><SPAN style="color: blue;">AS NVARCHAR</SPAN><SPAN 
+style="color: gray;">(</SPAN><SPAN style="color: black;">128</SPAN><SPAN style="color: gray;">)) 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: blue;">END 
+<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: green;">-- Send email 
+to distribution list.&nbsp;&nbsp;&nbsp;&nbsp; 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN style="color: blue;">EXEC </SPAN><SPAN 
+style="color: black;">msdb.dbo.</SPAN><SPAN 
+style="color: darkred;">sp_send_dbmail </SPAN><SPAN style="color: rgb(67, 67, 67);">@recipients</SPAN><SPAN 
+style="color: blue;">=</SPAN><SPAN 
+style="color: rgb(67, 67, 67);">@DL</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@subject </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@Subject</SPAN><SPAN style="color: gray;">,&nbsp;&nbsp;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@body </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@ReportHTML</SPAN><SPAN style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@body_format </SPAN><SPAN style="color: blue;">= 
+</SPAN><SPAN style="color: red;">'HTML'</SPAN><SPAN 
+style="color: gray;">,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="color: rgb(67, 67, 67);">@profile_name</SPAN><SPAN style="color: blue;">=</SPAN><SPAN 
+style="color: red;">'Server_DBAs Mail' </SPAN><SPAN 
+style="color: gray;">;<BR></SPAN><SPAN style="color: blue;">END</SPAN><SPAN 
+style="color: gray;">; </SPAN><SPAN style="color: green;">-- If there are 
+autogrows in the last day</SPAN></DIV>
+<P class="caption">Listing 5: Email the Auto-growth events that have occurred in 
+the last 24 hours to the DBA</P>
+<P>The code in Listing 5 shows all the auto-growth events that have occurred in 
+the last 24 hours. If an auto-growth event is found then it emails me a report 
+of the auto-growth events.</P>
+<H2>Don’t let your Auto-growth Events Run Wild</H2>
+<P>Auto-growth events are expensive operations that slow down the performance of 
+your database. Take the following preventive steps to ensure your auto-growth 
+events do not run wild:</P>
+<UL>
+  <LI>Pre-Size your databases and establishing appropriate auto-growth settings 
+  for your databases based on their growth profile. 
+  <LI>Minimize future auto-growth events by monitoring the growth of your 
+  databases, and re-establishing auto-growth settings when a database growth 
+  profile changes. 
+  <LI>Monitor auto-growth events so you can be alerted when your databases grow. 
+  
+  <LI>Consider defragmenting your database file system if you have let your 
+  auto-growth run wild. </LI></UL>
+<P>Taking these preventive and proactive measures will help improve your 
+database performance and better manage your disk space 
+utilization.</P></DIV><BR><BR>This article has been viewed 717 times.  </DIV>
+<DIV class="authorpanel"><A id="ctl00_MainContent_Author1_lnkImage" title="Greg Larsen" 
+href="http://www.simple-talk.com/author/greg-larsen/"><IMG style="border-width: 0px;" 
+id="ctl00_MainContent_Author1_imgAuthor" class="authorpicture" alt="Greg Larsen" 
+align="left" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/60.jpg"></A>
+<P><STRONG>Author profile:</STRONG> <A id="ctl00_MainContent_Author1_lnkName" 
+href="http://www.simple-talk.com/author/greg-larsen/">Greg Larsen</A></P>
+<P>Greg started working in the computer industry in 1982. In 1985, he got his 
+first DBA job, and since then he has held five different DBA jobs and managed a 
+number of different database management systems. Currently works as a DBA for 
+Department of Health in Washington State managing SQL Server databases, and also 
+does part-time consulting. He has published numerous articles in SQL Server 
+Magazine, and many online web sites dedicated to SQL Server. He also is a SQL 
+Server MVP and holds a number of Microsoft Certification.  Greg can be reached 
+at gregalarsen@msn.com.</P>
+<P><A id="ctl00_MainContent_Author1_lnkSearch" href="http://www.simple-talk.com/author/greg-larsen/">Search 
+for other articles by Greg Larsen</A></P>
+<DIV class="clear"></DIV></DIV>
+<DIV id="ctl00_MainContent_panVoting" class="rating"><STRONG>Rate this 
+article:</STRONG> &nbsp;&nbsp;Avg rating: <IMG style="border-width: 0px; width: 70px; height: 13px;" 
+id="ctl00_MainContent_imgRating2" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_sql_5star_70x13.gif"> 
+from a total of 4 votes.<BR><BR>
+<DIV id="ctl00_MainContent_panToRate">
+<TABLE class="rating" border="0">
+  <TBODY>
+  <TR>
+    <TD><INPUT id="ctl00_MainContent_radRating1" name="ctl00$MainContent$radRating" 
+      value="radRating1" type="radio"><BR>Poor</TD>
+    <TD><INPUT id="ctl00_MainContent_radRating2" name="ctl00$MainContent$radRating" 
+      value="radRating2" type="radio"><BR>OK</TD>
+    <TD><INPUT id="ctl00_MainContent_radRating3" name="ctl00$MainContent$radRating" 
+      value="radRating3" type="radio"><BR>Good</TD>
+    <TD><INPUT id="ctl00_MainContent_radRating4" name="ctl00$MainContent$radRating" 
+      value="radRating4" type="radio"><BR>Great</TD>
+    <TD><INPUT id="ctl00_MainContent_radRating5" name="ctl00$MainContent$radRating" 
+      value="radRating5" type="radio"><BR>Must read</TD>
+    <TD><INPUT style="border-width: 0px; width: 56px; height: 19px;" id="ctl00_MainContent_btnRateArticle" 
+      title="Rate article" name="ctl00$MainContent$btnRateArticle" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/btn_submit.gif" 
+      type="image"></TD></TR></TBODY></TABLE></DIV></DIV>
+<DIV id="ctl00_MainContent_panComments" class="comments"><A 
+name="forum">&nbsp;</A>
+<DIV class="haveyoursayheader">
+<DIV class="title">Have Your Say</DIV>        Do you have an opinion on this 
+article? Then <A class="commentlink" href="http://www.simple-talk.com/sql/database-administration/sql-server-database-growth-and-autogrowth-settings/?utm_source=simpletalk&amp;utm_medium=email-main&amp;utm_content=autogrowth-20111128&amp;utm_campaign=SQL#commentform"><U>add 
+your comment below</U></A>:      </DIV>
+<DIV class="forumview"><BR>
+<HR>
+
+<TABLE class="commenttable" border="0" cellSpacing="4" cellPadding="0" width="500">
+  <TBODY>
+  <TR>
+    <TD class="commenttitle">Subject: </TD>
+    <TD><B><SPAN 
+      id="ctl00_MainContent_ForumView1_repPosts_ctl01_lblSubject">Default trace 
+      audit dashboard</SPAN></B></TD></TR>
+  <TR>
+    <TD class="commenttitle">Posted by: </TD>
+    <TD><I><SPAN 
+      id="ctl00_MainContent_ForumView1_repPosts_ctl01_lblAuthor">Feodor</SPAN></I> 
+      (<SPAN>not signed in</SPAN>)</TD></TR>
+  <TR>
+    <TD class="commenttitle">Posted on: </TD>
+    <TD><I><SPAN 
+      id="ctl00_MainContent_ForumView1_repPosts_ctl01_lblDate">Friday, November 
+      25, 2011 at 11:51 PM</SPAN></I></TD></TR>
+  <TR>
+    <TD class="commenttitle" vAlign="top">Message: </TD>
+    <TD><SPAN 
+      id="ctl00_MainContent_ForumView1_repPosts_ctl01_lblMessage">Greg, recently 
+      I developed a set of reports which run as custom reports in SSMS and query 
+      the Default trace, which is available per SQL Server instance in versions 
+      2005 and later. The reports are called Default Trace Audit and can be 
+      downloaded from here: 
+      http://sqlconcept.com/tools/default-trace-audit-documentation-and-faq/<BR><BR>I 
+      am mentioning this, because they give an easy way to overview the most 
+      recent file growths and shrinks. <BR><BR>Feodor</SPAN></TD></TR></TBODY></TABLE>
+<HR>
+
+<DIV style="width: 100%;" id="ctl00_MainContent_ForumView1_panPostingAllowed">
+<SCRIPT language="javascript" type="text/javascript">
+    function valNameLength(sender, args)
+    {
+        if (args.Value.length == 0 || args.Value.length > 256)
+        {
+            args.IsValid = false;
+        }
+    }
+    function valSubjectLength(sender, args)
+    {
+        if (args.Value.length == 0 || args.Value.length > 80)
+        {
+            args.IsValid = false;
+        }
+    
+    }
+    function valMessageLength(sender, args)
+    {
+        if (args.Value.length == 0 || args.Value.length > 8000)
+        {
+            args.IsValid = false;
+        }
+    }
+</SCRIPT>
+Enter your comment here:<BR><BR>
+<TABLE border="0" cellSpacing="0" cellPadding="0">
+  <TBODY>
+  <TR>
+    <TD colSpan="2">
+      <DIV style="color: red; display: none;" id="ctl00_MainContent_ForumView1_ValidationSummary1"></DIV></TD></TR>
+  <TR>
+    <TD vAlign="top"><SPAN style="color: red; visibility: hidden;" id="ctl00_MainContent_ForumView1_CustomValidator3" 
+      title="Your subject must be between 1 and 256 characters in length.">*</SPAN>&nbsp;Name:&nbsp;</TD>
+    <TD><INPUT style="width: 420px;" id="ctl00_MainContent_ForumView1_txtName" 
+      name="ctl00$MainContent$ForumView1$txtName" value="Anonymous" 
+    type="text"></TD></TR>
+  <TR>
+    <TD vAlign="top"><SPAN style="color: red; visibility: hidden;" id="ctl00_MainContent_ForumView1_CustomValidator1" 
+      title="Your subject must be between 1 and 80 characters in length.">*</SPAN>&nbsp;Subject:&nbsp;</TD>
+    <TD><INPUT style="width: 420px;" id="ctl00_MainContent_ForumView1_txtSubject" 
+      name="ctl00$MainContent$ForumView1$txtSubject" type="text"></TD></TR>
+  <TR>
+    <TD vAlign="top"><SPAN style="color: red; visibility: hidden;" id="ctl00_MainContent_ForumView1_CustomValidator2" 
+      title="Your message must be between 1 and 8000 characters in length.">*</SPAN>&nbsp;Message:&nbsp;</TD>
+    <TD><TEXTAREA id="ctl00_MainContent_ForumView1_txtMessage" cols="50" rows="10" name="ctl00$MainContent$ForumView1$txtMessage"></TEXTAREA></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD><INPUT id="ctl00_MainContent_ForumView1_btnPost" onclick='javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions("ctl00$MainContent$ForumView1$btnPost", "", true, "", "", false, false))' name="ctl00$MainContent$ForumView1$btnPost" value="Post Comment" type="submit"></TD></TR>
+  </TBODY></TABLE><A name="post">&nbsp;</A></DIV><A 
+name="commentform">&nbsp;</A></DIV></DIV>
+<SCRIPT src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/swfobject.js"></SCRIPT>
+
+<SCRIPT src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/jquery-1.4.4.min.js"></SCRIPT>
+
+<SCRIPT src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/jquery.colorbox-min.js"></SCRIPT>
+
+<SCRIPT src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/jquery.videolightbox.js"></SCRIPT>
+
+<SCRIPT>
+    $(document).ready(function() {
+      $(".video-lightbox").video();
+    });
+  </SCRIPT>
+</DIV>
+<DIV class="rightcolumn">
+<DIV class="sidenav">
+<DIV class="header"></DIV>
+<DIV class="middle">
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl00_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl00_lnkCategory" href="http://www.simple-talk.com/sql/">SQL 
+Home</A></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" id="ctl00_RightColumn_Categories1_repCategories_ctl01_imgSpacer" 
+src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl02_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl02_lnkCategory" href="http://www.simple-talk.com/sql/learn-sql-server/">Learn 
+SQL Server</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl02_spaCount" 
+class="articlecount">(76 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl03_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl04_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl04_lnkCategory" href="http://www.simple-talk.com/sql/sql-training/">SQL 
+Training</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl04_spaCount" 
+class="articlecount">(8 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl05_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl06_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl06_lnkCategory" href="http://www.simple-talk.com/sql/database-administration/">Database 
+Administration</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl06_spaCount" 
+class="articlecount">(103 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl07_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl08_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl08_lnkCategory" href="http://www.simple-talk.com/sql/t-sql-programming/">T-SQL 
+Programming</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl08_spaCount" 
+class="articlecount">(130 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl09_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl10_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl10_lnkCategory" href="http://www.simple-talk.com/sql/performance/">Performance</A> 
+<SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl10_spaCount" class="articlecount">(34 
+articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl11_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl12_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl12_lnkCategory" href="http://www.simple-talk.com/sql/backup-and-recovery/">Backup 
+and Recovery</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl12_spaCount" 
+class="articlecount">(22 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl13_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl14_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl14_lnkCategory" href="http://www.simple-talk.com/sql/sql-tools/">SQL 
+Tools</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl14_spaCount" 
+class="articlecount">(69 articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl15_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl16_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl16_lnkCategory" href="http://www.simple-talk.com/sql/ssis/">SSIS</A> 
+<SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl16_spaCount" class="articlecount">(19 
+articles)</SPAN></DIV><IMG style="border-width: 0px; width: 320px; height: 3px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl17_imgSpacer" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/sidenav_sql_lines_320x3.jpg"><BR>
+<DIV class="navitem"><IMG style="border-width: 0px; width: 5px; height: 9px;" 
+id="ctl00_RightColumn_Categories1_repCategories_ctl18_imgArrow" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_arrow_white_5x9.gif">&nbsp;&nbsp;<A 
+id="ctl00_RightColumn_Categories1_repCategories_ctl18_lnkCategory" href="http://www.simple-talk.com/sql/reporting-services/">Reporting 
+Services</A> <SPAN id="ctl00_RightColumn_Categories1_repCategories_ctl18_spaCount" 
+class="articlecount">(20 articles)</SPAN></DIV></DIV>
+<DIV class="footer"></DIV></DIV>
+<DIV class="sidepanels">
+<DIV id="RSSfeedwidget" class="widget hidden">
+<DIV class="header"><IMG title="RSS Feeds" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="315" height="50"></DIV>
+<DIV class="middle">
+<DIV class="RSSselectors">
+<DIV class="rss-inputs"><INPUT id="sqlFeed" name="rss" value="2" CHECKED="checked" 
+type="checkbox"><LABEL for="sqlFeed">SQL</LABEL><BR><INPUT id="netFeed" name="rss" 
+value="3" CHECKED="checked" type="checkbox"><LABEL 
+for="netFeed">.NET</LABEL><BR><INPUT id="exchangeFeed" name="rss" value="31" 
+CHECKED="checked" type="checkbox"><LABEL 
+for="exchangeFeed">SysAdmin</LABEL><BR><INPUT id="opinionFeed" name="rss" value="4" 
+CHECKED="checked" type="checkbox"><LABEL 
+for="opinionFeed">Opinion</LABEL><BR><INPUT id="booksFeed" name="rss" value="35" 
+CHECKED="checked" type="checkbox"><LABEL for="booksFeed">Books</LABEL><BR><INPUT 
+id="blogsFeed" name="rss" value="B" CHECKED="checked" type="checkbox"><LABEL 
+for="blogsFeed">Blogs</LABEL><BR><A style="margin-top: 10px; display: block;" 
+id="rssGetLink" onclick="RssGetSide(false); return(false);" href="http://www.simple-talk.com/rss.aspx"><IMG 
+alt="Get my feed" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/btn-get-my-feed.gif" 
+width="117" height="19"></A></DIV>
+<DIV class="rss-buttons">
+<DIV class="rss-advanced">                    If you update your feed, please 
+remember to tell your RSS reader the new URL                    <BR><BR><A id="rssAdvLink" 
+onclick="RssGetSide(true); return(false);" href="http://www.simple-talk.com/rsssel.aspx">Click 
+here for <B>advanced</B> RSS options</A></DIV></DIV></DIV>
+<DIV style="clear: both;"></DIV></DIV>
+<DIV class="footer"></DIV></DIV>
+<DIV id="SQLOpinion" class="widget">
+<DIV class="header"><A id="ctl00_RightColumn_SQLOpinion1_lnkHeader" href="http://www.simple-talk.com/author/phil-factor/"><IMG 
+title="Phil Factor - the wilder shores of transact sql" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="315" height="50"></A></DIV>
+<DIV class="middle">
+<DIV class="widgetcontent"><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR><A id="ctl00_RightColumn_SQLOpinion1_lnkAuthor" title="Phil Factor" 
+href="http://www.simple-talk.com/author/phil-factor/"><IMG style="border-width: 0px; width: 65px; height: 83px;" 
+id="ctl00_RightColumn_SQLOpinion1_imgAuthor" class="avatar" alt="Phil Factor" 
+align="left" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/avatar.jpg"></A>
+<DIV id="ctl00_RightColumn_SQLOpinion1_panArticles"><STRONG><A id="ctl00_RightColumn_SQLOpinion1_lnkArticle1" 
+href="http://www.simple-talk.com/sql/t-sql-programming/temporary-tables-in-sql-server/">Temporary 
+Tables in SQL Server</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_lquot_10x8.gif" 
+width="10" height="9">&nbsp;Temporary tables are used by every DB developer, but 
+they're not likely to be too adventurous with their use, or...<IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_rquot_10x9.gif" 
+width="10" height="9">&nbsp;<A id="ctl00_RightColumn_SQLOpinion1_lnkArticle2" 
+href="http://www.simple-talk.com/sql/t-sql-programming/temporary-tables-in-sql-server/">Read 
+more...</A><BR><BR><BR></DIV>
+<DIV id="ctl00_RightColumn_SQLOpinion1_panBlogs">	                RECENT BLOG 
+POSTS:<BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;<A id="ctl00_RightColumn_SQLOpinion1_repBlogPosts_ctl00_lnkBlogPost" 
+href="http://www.simple-talk.com/community/blogs/philfactor/104040.aspx">Table 
+Variables: an empirical approach.</A><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;<A id="ctl00_RightColumn_SQLOpinion1_repBlogPosts_ctl01_lnkBlogPost" 
+href="http://www.simple-talk.com/community/blogs/philfactor/103546.aspx">Presentations: 
+On snatching victory from the...</A><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;<A id="ctl00_RightColumn_SQLOpinion1_repBlogPosts_ctl02_lnkBlogPost" 
+href="http://www.simple-talk.com/community/blogs/philfactor/101884.aspx">Using 
+Live Data in Database Development Work</A><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR></DIV>
+<DIV class="clear"></DIV><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="1" height="8"><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_articles_13x15.gif" 
+width="13" height="15">&nbsp;<A id="ctl00_RightColumn_SQLOpinion1_lnkBlog" href="http://www.simple-talk.com/community/blogs/philfactor/default.aspx">View 
+the blog</A><BR></DIV></DIV>
+<DIV class="footer"></DIV></DIV>
+<DIV id="topratedarticles" class="widget">
+<DIV class="header"><A id="ctl00_RightColumn_ArticlesRated1_lnkHeader"><IMG 
+title="Phil Factor - the wilder shores of transact sql" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="300" height="30"></A></DIV>
+<DIV class="middle">
+<DIV class="widgetcontent"><STRONG><A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl00_lnkArticle1" 
+href="http://www.simple-talk.com/sql/sql-tools/sql-source-control-the-development-story-/">SQL 
+Source Control: The Development Story </A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Often, there is a huge difference between software 
+being easy to use, and easy to develop. When your...&nbsp;<A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl00_lnkArticle2" 
+href="http://www.simple-talk.com/sql/sql-tools/sql-source-control-the-development-story-/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl01_lnkArticle1" 
+href="http://www.simple-talk.com/sql/learn-sql-server/how-to-import-data-from-html-pages/">How 
+to Import Data from HTML pages</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;It turns out that there are plenty of ways to get 
+data into SQL Server from  websites, whether the data...&nbsp;<A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl01_lnkArticle2" 
+href="http://www.simple-talk.com/sql/learn-sql-server/how-to-import-data-from-html-pages/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl02_lnkArticle1" 
+href="http://www.simple-talk.com/sql/sql-tools/sql-scripts-manager-an-appreciation/">SQL 
+Scripts Manager: An Appreciation</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;SQL Scripts Manager is Simple-Talk's present to its 
+readers. William Brewer was an enthusiastic...&nbsp;<A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl02_lnkArticle2" 
+href="http://www.simple-talk.com/sql/sql-tools/sql-scripts-manager-an-appreciation/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl03_lnkArticle1" 
+href="http://www.simple-talk.com/sql/reporting-services/administrating-sql-server-reporting-services---planning,-documenting-and-troubleshooting/">Administrating 
+SQL Server Reporting Services - Planning, Documenting and 
+Troubleshooting</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;DBAs are usually charged with the administration of 
+Reporting Services, but are often short on guidance...&nbsp;<A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl03_lnkArticle2" 
+href="http://www.simple-talk.com/sql/reporting-services/administrating-sql-server-reporting-services---planning,-documenting-and-troubleshooting/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl04_lnkArticle1" 
+href="http://www.simple-talk.com/sql/reporting-services/hosted-team-foundation-server-2010-review/">Hosted 
+Team Foundation Server 2010 Review</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Team Foundation Server (TFS) has expanded its remit 
+to support the whole software development process,...&nbsp;<A id="ctl00_RightColumn_ArticlesRated1_repArticles_ctl04_lnkArticle2" 
+href="http://www.simple-talk.com/sql/reporting-services/hosted-team-foundation-server-2010-review/">Read 
+more...</A><BR><BR></DIV></DIV>
+<DIV class="footer"></DIV></DIV>
+<DIV id="mostviewedarticles" class="widget">
+<DIV class="header"><A id="ctl00_RightColumn_ArticlesViewed1_lnkHeader"><IMG 
+title="Phil Factor - the wilder shores of transact sql" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="300" height="30"></A></DIV>
+<DIV class="middle">
+<DIV class="widgetcontent"><STRONG><A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl00_lnkArticle1" 
+href="http://www.simple-talk.com/sql/reporting-services/beginning-sql-server-2005-reporting-services-part-1/">Beginning 
+SQL Server 2005 Reporting Services Part 1</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Steve Joubert begins an in-depth tour of SQL Server 
+2005 Reporting Services with a step-by-step guide...&nbsp;<A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl00_lnkArticle2" 
+href="http://www.simple-talk.com/sql/reporting-services/beginning-sql-server-2005-reporting-services-part-1/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl01_lnkArticle1" 
+href="http://www.simple-talk.com/sql/database-administration/ten-common-database-design-mistakes/">Ten 
+Common Database Design Mistakes</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Database design and implementation is the 
+cornerstone of any data centric project (read 99.9% of...&nbsp;<A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl01_lnkArticle2" 
+href="http://www.simple-talk.com/sql/database-administration/ten-common-database-design-mistakes/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl02_lnkArticle1" 
+href="http://www.simple-talk.com/sql/t-sql-programming/reading-and-writing-files-in-sql-server-using-t-sql/">Reading 
+and Writing Files in SQL Server using T-SQL</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;SQL Server provides several "standard" techniques by 
+which to read and write to files but, just...&nbsp;<A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl02_lnkArticle2" 
+href="http://www.simple-talk.com/sql/t-sql-programming/reading-and-writing-files-in-sql-server-using-t-sql/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl03_lnkArticle1" 
+href="http://www.simple-talk.com/sql/reporting-services/beginning-sql-server-2005-reporting-services-part-2/">Beginning 
+SQL Server 2005 Reporting Services Part 2</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Continuing his in-depth tour of SQL Server 2005 
+Reporting Services, Steve Joubert demonstrates the most...&nbsp;<A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl03_lnkArticle2" 
+href="http://www.simple-talk.com/sql/reporting-services/beginning-sql-server-2005-reporting-services-part-2/">Read 
+more...</A><BR><BR><STRONG><A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl04_lnkArticle1" 
+href="http://www.simple-talk.com/sql/database-administration/creating-csv-files-using-bcp-and-stored-procedures/">Creating 
+CSV Files Using BCP and Stored Procedures</A></STRONG><BR><IMG src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/w_icon_article_9x11.jpg" 
+width="9" height="11">&nbsp;Nigel Rivett demonstrates some core techniques for 
+extracting SQL Server data into CSV files, focussing...&nbsp;<A id="ctl00_RightColumn_ArticlesViewed1_repArticles_ctl04_lnkArticle2" 
+href="http://www.simple-talk.com/sql/database-administration/creating-csv-files-using-bcp-and-stored-procedures/">Read 
+more...</A><BR><BR></DIV></DIV>
+<DIV class="footer"></DIV></DIV>
+<DIV id="WhyJoin" class="widget">
+<DIV class="header"><A id="ctl00_RightColumn_WhyJoin1_LoginView1_lnkJoin1" href="http://www.simple-talk.com/community/user/CreateUser.aspx?ReturnUrl=%2fsql%2fdatabase-administration%2fsql-server-database-growth-and-autogrowth-settings%2f%3futm_source%3dsimpletalk%26utm_medium%3demail-main%26utm_content%3dautogrowth-20111128%26utm_campaign%3dSQL"><IMG 
+title="Join Simple Talk" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/1px.gif" 
+width="315" height="50"></A></DIV>
+<DIV class="middle">
+<DIV class="widgetcontent"><A id="ctl00_RightColumn_WhyJoin1_LoginView1_lnkJoin2" 
+href="http://www.simple-talk.com/community/user/CreateUser.aspx?ReturnUrl=%2fsql%2fdatabase-administration%2fsql-server-database-growth-and-autogrowth-settings%2f%3futm_source%3dsimpletalk%26utm_medium%3demail-main%26utm_content%3dautogrowth-20111128%26utm_campaign%3dSQL"><IMG 
+class="paper" title="Join Simple Talk" align="left" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/icon_newsletter_54x43.jpg" 
+width="54" height="43"></A>		Over 400,000 Microsoft professionals subscribe to 
+the Simple-Talk technical journal. Join today, it's fast, simple, free and 
+secure.<BR><BR>
+<DIV class="joinbutton"><A id="ctl00_RightColumn_WhyJoin1_LoginView1_lnkJoin3" 
+href="http://www.simple-talk.com/community/user/CreateUser.aspx?ReturnUrl=%2fsql%2fdatabase-administration%2fsql-server-database-growth-and-autogrowth-settings%2f%3futm_source%3dsimpletalk%26utm_medium%3demail-main%26utm_content%3dautogrowth-20111128%26utm_campaign%3dSQL"><IMG 
+alt="Join Simple Talk" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/btn_join_117x19.jpg" 
+width="117" height="19"></A></DIV></DIV></DIV>
+<DIV class="footer"></DIV></DIV></DIV>
+<DIV class="clear"></DIV><BR></DIV>
+<DIV class="clear"></DIV><BR>
+<DIV class="pagefooter">
+<DIV class="pagefooternavright"><A id="ctl00_lnkGotoPrivacy" href="http://www.simple-talk.com/privacy-policy.aspx">Privacy 
+policy</A> |                    <A id="ctl00_lnkGotoTerms" href="http://www.simple-talk.com/terms-and-conditions.aspx">Terms 
+and conditions</A> |                    <A href="http://www.red-gate.com/" 
+target="_blank">©2005-2011 Red Gate Software</A></DIV>
+<DIV class="pagefooternavleft"><A id="ctl00_lnkGotoAbout" href="http://www.simple-talk.com/about.aspx">About</A> 
+|                    <A id="ctl00_lnkGotoSitemap" href="http://www.simple-talk.com/site-map.aspx">Site 
+map</A> |                    <A id="ctl00_lnkGotoAuthor" href="http://www.simple-talk.com/become-an-author.aspx">Become 
+an author</A> |                    <A id="ctl00_lnkGotoArchive" href="http://www.simple-talk.com/newsletter-archive/">Newsletters</A> 
+|                    <A id="ctl00_lnkGotoContact" href="http://www.simple-talk.com/contact-us.aspx">Contact 
+us</A></DIV></DIV></DIV></DIV>
+<SCRIPT type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ctl00_MainContent_ForumView1_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("ctl00_MainContent_ForumView1_CustomValidator3"), document.getElementById("ctl00_MainContent_ForumView1_CustomValidator1"), document.getElementById("ctl00_MainContent_ForumView1_CustomValidator2"));
+//]]>
+</SCRIPT>
+
+<SCRIPT type="text/javascript">
+//<![CDATA[
+var ctl00_MainContent_ForumView1_ValidationSummary1 = document.all ? document.all["ctl00_MainContent_ForumView1_ValidationSummary1"] : document.getElementById("ctl00_MainContent_ForumView1_ValidationSummary1");
+ctl00_MainContent_ForumView1_ValidationSummary1.showmessagebox = "True";
+ctl00_MainContent_ForumView1_ValidationSummary1.showsummary = "False";
+var ctl00_MainContent_ForumView1_CustomValidator3 = document.all ? document.all["ctl00_MainContent_ForumView1_CustomValidator3"] : document.getElementById("ctl00_MainContent_ForumView1_CustomValidator3");
+ctl00_MainContent_ForumView1_CustomValidator3.controltovalidate = "ctl00_MainContent_ForumView1_txtName";
+ctl00_MainContent_ForumView1_CustomValidator3.errormessage = "Your name must be between 1 and 256 characters in length.";
+ctl00_MainContent_ForumView1_CustomValidator3.evaluationfunction = "CustomValidatorEvaluateIsValid";
+ctl00_MainContent_ForumView1_CustomValidator3.clientvalidationfunction = "valNameLength";
+ctl00_MainContent_ForumView1_CustomValidator3.validateemptytext = "true";
+var ctl00_MainContent_ForumView1_CustomValidator1 = document.all ? document.all["ctl00_MainContent_ForumView1_CustomValidator1"] : document.getElementById("ctl00_MainContent_ForumView1_CustomValidator1");
+ctl00_MainContent_ForumView1_CustomValidator1.controltovalidate = "ctl00_MainContent_ForumView1_txtSubject";
+ctl00_MainContent_ForumView1_CustomValidator1.errormessage = "Your subject must be between 1 and 80 characters in length.";
+ctl00_MainContent_ForumView1_CustomValidator1.evaluationfunction = "CustomValidatorEvaluateIsValid";
+ctl00_MainContent_ForumView1_CustomValidator1.clientvalidationfunction = "valSubjectLength";
+ctl00_MainContent_ForumView1_CustomValidator1.validateemptytext = "true";
+var ctl00_MainContent_ForumView1_CustomValidator2 = document.all ? document.all["ctl00_MainContent_ForumView1_CustomValidator2"] : document.getElementById("ctl00_MainContent_ForumView1_CustomValidator2");
+ctl00_MainContent_ForumView1_CustomValidator2.controltovalidate = "ctl00_MainContent_ForumView1_txtMessage";
+ctl00_MainContent_ForumView1_CustomValidator2.errormessage = "Your message must be between 1 and 8000 characters in length.";
+ctl00_MainContent_ForumView1_CustomValidator2.evaluationfunction = "CustomValidatorEvaluateIsValid";
+ctl00_MainContent_ForumView1_CustomValidator2.clientvalidationfunction = "valMessageLength";
+ctl00_MainContent_ForumView1_CustomValidator2.validateemptytext = "true";
+//]]>
+</SCRIPT>
+
+<SCRIPT type="text/javascript">
+//<![CDATA[
+
+document.getElementById('ctl00_MainContent_ForumView1_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('ctl00_MainContent_ForumView1_ValidationSummary1'));
+}
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        Sys.Application.initialize();
+
+document.getElementById('ctl00_MainContent_ForumView1_CustomValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ctl00_MainContent_ForumView1_CustomValidator3'));
+}
+
+document.getElementById('ctl00_MainContent_ForumView1_CustomValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ctl00_MainContent_ForumView1_CustomValidator1'));
+}
+
+document.getElementById('ctl00_MainContent_ForumView1_CustomValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ctl00_MainContent_ForumView1_CustomValidator2'));
+}
+//]]>
+</SCRIPT>
+</FORM>
+<SCRIPT type="text/javascript" src="SQL%20Server%20Database%20Growth%20and%20Autogrowth%20Settings_files/urchin.js"></SCRIPT>
+
+<SCRIPT type="text/javascript">
+_uacct = "UA-90206-4";
+urchinTracker();
+</SCRIPT>
+</BODY></HTML>

@@ -1,0 +1,1 @@
+powershell -command "& 'c:\scripts\SP\Phone_list_for_WSS.ps1'"

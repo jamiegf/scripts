@@ -1,0 +1,1 @@
+slmgr.vbs -ipk YK2D6-J3H4P-B9XR2-6949H-49TRT

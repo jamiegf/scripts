@@ -1,0 +1,16 @@
+#in powershell
+az login
+
+#get subscription id from home, subscription, Subscription ID
+az account set --subscription "35akss-subscription-id"
+f644ce8c-6f31-4671-b02e-08f7945432e0
+
+
+
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/f644ce8c-6f31-4671-b02e-08f7945432e0"
+
+# you can optionally save these vars to PowerShell
+$Env:ARM_CLIENT_ID = "54225a50-1bd5-4823-9282-4b5e006599b6"
+$Env:ARM_CLIENT_SECRET = "gfs8Q~fFxtXaiYPburMYNrLvb3Vj0-LJ1Wfdkatq"
+$Env:ARM_SUBSCRIPTION_ID = "f644ce8c-6f31-4671-b02e-08f7945432e0"
+$Env:ARM_TENANT_ID = "e56afa3f-40c5-4668-be5c-33700b70cd2d"

@@ -1,0 +1,99 @@
+variable "cidr_block" {
+  default = "10.20"
+}
+
+
+data "aws_availability_zones" "available" {}
+resource "aws_vpc" "dev" {
+  cidr_block           = "10.20.0.0/16"
+  enable_dns_hostnames = true
+  tags =  {
+    Name = "DEV VPC"
+  }
+}
+
+#Create Public Subnets
+resource "aws_subnet" "dev_public_subnet" {
+  count = "${length(data.aws_availability_zones.available.names)}"
+  vpc_id = "${aws_vpc.dev.id}"
+  cidr_block = "10.20.${1+count.index}.0/24"
+  availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "Dev_PublicSubnet${count.index}"
+  }
+}
+#Create Private Subnets
+resource "aws_subnet" "dev_private_subnet" {
+  count = "${length(data.aws_availability_zones.available.names)}"
+  vpc_id = "${aws_vpc.dev.id}"
+  cidr_block = "10.20.${10+count.index}.0/24"
+  availability_zone= "${data.aws_availability_zones.available.names[count.index]}"
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "Dev_PrivateSubnet${count.index}"
+  }
+}
+ #Create Internet Gateway and attach it to VPC
+ resource "aws_internet_gateway" "dev_IGW" {    # Creating Internet Gateway
+    vpc_id =  aws_vpc.dev.id               # vpc_id will be generated after we create VPC
+      tags = {
+    Name = "DEV IGW"
+  }
+ }
+
+ #Route table for Public Subnets
+ resource "aws_route_table" "dev_PublicRT" {    # Creating RT for Public Subnet
+    vpc_id =  aws_vpc.dev.id
+         route {
+    cidr_block = "0.0.0.0/0"               # Traffic from Public Subnet reaches Internet via Internet Gateway
+    gateway_id = aws_internet_gateway.dev_IGW.id
+    
+     }
+       tags = {
+    Name = "DEV Public Route Table"
+  }
+ }
+  #Route table Association with Public Subnet's
+ resource "aws_route_table_association" "dev_PublicRTassociation" {
+    count = "${length(data.aws_availability_zones.available.names)}"
+    subnet_id = aws_subnet.dev_public_subnet[count.index].id
+    route_table_id = aws_route_table.dev_PublicRT.id
+ }
+
+ ##########################################
+
+
+#create Elastic IP
+ resource "aws_eip" "dev_nateIP" {
+   vpc   = true
+     tags = {
+    Name = "DEV NAT Gateway EIP"
+  }
+ }
+ #Creating the NAT Gateway using subnet_id and allocation_id
+ resource "aws_nat_gateway" "dev_NATgw" {
+   allocation_id = aws_eip.dev_nateIP.id
+   subnet_id = aws_subnet.dev_public_subnet[0].id   # 0 will use first public subnet created
+     tags = {
+    Name = "DEV NAT Gateway"
+  }
+ }
+
+  #Route table for Private Subnet's
+ resource "aws_route_table" "dev_PrivateRT" {    # Creating RT for Private Subnet
+   vpc_id = aws_vpc.dev.id
+   route {
+   cidr_block = "0.0.0.0/0"             # Traffic from Private Subnet reaches Internet via NAT Gateway
+   nat_gateway_id = aws_nat_gateway.dev_NATgw.id
+   }
+     tags = {
+    Name = "DEV Private Route Table"
+  }
+ }
+  #Route table Association with Private Subnet's
+ resource "aws_route_table_association" "dev_PrivateRTassociation" {
+    count = "${length(data.aws_availability_zones.available.names)}"
+    subnet_id = aws_subnet.dev_private_subnet[count.index].id
+    route_table_id = aws_route_table.dev_PrivateRT.id
+ }

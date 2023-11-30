@@ -1,0 +1,7 @@
+Add-PSSnapin quest.activeroles.admanagement
+$ou2 = "ou=Z - Left Users,dc=eu,dc=above,dc=net"
+
+
+
+      
+               Get-QADUser -searchroot $ou2 | foreach {Set-QADUser -identity $_ -email ($_.email).Tolower()} | Select-Object email

@@ -1,0 +1,10 @@
+variable "region" {}
+variable "prd_vpc_cidr" {}
+variable "prd_public_subnets" {}
+variable "prd_private_subnets" {}
+variable "stg_vpc_cidr" {}
+variable "stg_public_subnets" {}
+variable "stg_private_subnets" {}
+variable "dev_vpc_cidr" {}
+variable "dev_public_subnets" {}
+variable "dev_private_subnets" {}

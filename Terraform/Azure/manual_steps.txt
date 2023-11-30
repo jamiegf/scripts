@@ -1,0 +1,14 @@
+create virtual network
+create ngw
+create subnet (create another for autoscale vms)
+create bastion
+create default-nsg + assign + create outbound ip address 
+create route table + assign
+
+create VM
+Create website on vm
+create image
+
+
+create : virtual machine scale set (need to add http rules for alb-internal access)
+create application gateway (not ALB). this is the same as an aws alb layer 7. 

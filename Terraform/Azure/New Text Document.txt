@@ -1,0 +1,6 @@
+create an "app registration" (called it terraform)
+
+Subscription > add, role assignment
+role, contributers (in priveleged admin roles), search "terraform" or whetever app registration" select, review and assign
+
+

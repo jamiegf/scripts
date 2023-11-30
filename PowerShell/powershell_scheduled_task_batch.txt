@@ -1,0 +1,1 @@
+powershell -command "& '\\btgukdat03\shared\Internal Systems\Systems Support\Applications & Drivers\ADScripts\AD_Accounts_Report.ps1' "

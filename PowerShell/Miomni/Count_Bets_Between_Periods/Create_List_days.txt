@@ -1,0 +1,12 @@
+#create a list of dates
+$c = 0
+
+do {
+
+
+$c = $c + 1
+
+$day = ((get-date).adddays(-$c)).tostring('MM_dd_yyyy') 
+ $day >> c:\temp\days.txt
+}
+until ($c -eq 150 )

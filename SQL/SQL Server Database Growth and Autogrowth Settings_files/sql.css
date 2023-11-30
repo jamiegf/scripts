@@ -1,0 +1,189 @@
+.maincontent .header {
+	background-color: rgb(255, 255, 255);
+}
+.rightcolumn .header {
+	background-color: rgb(255, 255, 255);
+}
+.mainnav {
+	background-color: rgb(103, 92, 109);
+}
+.subnav {
+	color: rgb(102, 102, 102); background-color: rgb(232, 228, 234);
+}
+.summarybox {
+	width: 200px; float: right;
+}
+.summarybox .header {
+	margin: 0px; padding: 0px; width: 200px; height: 24px; background-image: url("../../images/interface/summary_sql_header_200x24.jpg"); background-repeat: no-repeat;
+}
+.summarybox .middle {
+	margin: 0px; padding: 0px; font-size: 75%; background-image: url("../../images/interface/summary_sql_middle_200x1.jpg");
+}
+.summaryboxcontent {
+	padding: 0px 20px 5px;
+}
+.summaryboxcontent2 {
+	padding: 7px 20px 0px;
+}
+.summaryboxcontent2 a {
+	color: rgb(51, 51, 51);
+}
+.summaryboxcontent2 a:hover {
+	color: rgb(204, 102, 0);
+}
+.summarybox .footer {
+	width: 200px; height: 38px; background-image: url("../../images/interface/summary_sql_bottom_200x38.jpg"); background-repeat: no-repeat;
+}
+.summaryboxlines {
+	margin: 0px 10px 0px 11px;
+}
+.codeforeground {
+	margin: 5px 0px; padding: 5px 10px; color: rgb(51, 51, 51); background-color: rgb(232, 228, 234);
+}
+.authorpanel {
+	margin: 10px; padding: 5px 10px; border: 1px solid rgb(103, 92, 109); color: rgb(51, 51, 51); font-size: 75%; background-color: rgb(232, 228, 234);
+}
+.authorpanel .authorpicture {
+	margin: 10px 10px 0px 0px;
+}
+div.rating {
+	margin: 10px; padding: 5px 10px; border: 1px solid rgb(103, 92, 109); color: rgb(51, 51, 51); font-size: 75%; background-color: rgb(232, 228, 234);
+}
+.sidenav {
+	margin: 0px; padding: 0px; width: 320px;
+}
+.sidenav .header {
+	margin: 0px; padding: 0px; width: 320px; height: 46px; background-image: url("../../images/interface/sidenav_sql_header_320x46.jpg"); background-repeat: no-repeat;
+}
+.sidenav .middle {
+	margin: 0px; padding: 0px; width: 320px; font-size: 80%; background-image: url("../../images/interface/sidenav_sql_bg_320x1.jpg");
+}
+.sidenav .footer {
+	margin: 0px 0px 10px; padding: 0px; width: 320px; height: 38px; background-image: url("../../images/interface/sidenav_sql_footer_320x38.jpg"); background-repeat: no-repeat;
+}
+.sidenav .middle a {
+	color: rgb(255, 255, 255); font-weight: bold;
+}
+.sidenav .middle span.selected {
+	color: rgb(255, 153, 51); font-weight: bold;
+}
+.navitem {
+	padding: 4px 0px 4px 22px;
+}
+.articlecount {
+	margin: 0px 0px 0px 5px; color: rgb(255, 153, 51); font-weight: normal;
+}
+.sidenav .footer .sidehomelink {
+	padding: 5px 0px 4px 20px; color: rgb(255, 255, 255); font-size: 70%;
+}
+.sidenav .footer a {
+	color: rgb(255, 153, 51); text-decoration: underline;
+}
+.featurearticlespanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../../images/interface/header_sql_features_666x48.jpg"); background-repeat: no-repeat;
+}
+.allarticlespanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../../images/interface/header_sql_all_666x48.jpg"); background-repeat: no-repeat;
+}
+.morearticlespanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../../images/interface/header_sql_more_666x48.jpg"); background-repeat: no-repeat;
+}
+.editorscommentpanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../../images/interface/header_sql_editors_666x48.jpg"); background-repeat: no-repeat;
+}
+.categoriespanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../../images/interface/header_sql_categories_666x48.jpg"); background-repeat: no-repeat;
+}
+.featurearticlespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+.allarticlespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+.morearticlespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+.editorscommentpanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+.categoriespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+allarticlespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../../images/interface/panel_background_666x1.jpg");
+}
+.featurearticlespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.allarticlespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.morearticlespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.editorscommentpanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.categoriespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+allarticlespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.featurearticlespanel .lines {
+	margin: 5px 0px 5px 18px; clear: left;
+}
+.allarticlespanel .lines {
+	margin: 5px 0px 5px 18px; clear: left;
+}
+.editorscommentpanel .lines {
+	margin: 5px 0px;
+}
+td img.lines {
+	margin: 0px 0px 0px 14px;
+}
+pre {
+	background-color: rgb(232, 228, 234);
+}
+pre {
+	background-color: rgb(232, 228, 234);
+}
+hr {
+	color: rgb(103, 92, 109);
+}
+.comments {
+	margin: 10px 0px;
+}
+.haveyoursayheader {
+	margin: 10px; padding: 10px; color: rgb(232, 223, 223); font-size: 80%; background-color: rgb(103, 92, 109);
+}
+.haveyoursayheader .title {
+	font-family: "times new roman", times, serif; font-size: 160%;
+}
+.forumview {
+	margin: 0px 10px;
+}
+.CommonMessageError {
+	padding: 4px; border: 1px solid rgb(103, 92, 109); color: rgb(68, 51, 51); font-family: Arial, Verdana, Sans-serif; font-size: 100%; font-weight: bold; margin-top: 8px; margin-bottom: 8px; background-color: rgb(232, 223, 223);
+}
+.CommonImageTextButton {
+	background-position: 1px 1px; margin: 1px; padding: 4px 4px 4px 22px; border: 1px solid rgb(103, 92, 109); color: rgb(51, 51, 51); line-height: normal; font-family: Arial, Verdana, Sans-serif; font-size: 80%; font-weight: bold; display: inline-block; white-space: nowrap; background-repeat: no-repeat; background-color: rgb(232, 223, 223);
+}
+.CommonListTitle {
+	margin: 5px 0px 10px; padding: 6px 6px 6px 8px; border: 1px solid rgb(103, 92, 109); color: rgb(103, 92, 109); font-family: Arial, Verdana, Sans-serif; font-size: 90%; font-weight: bold; background-color: rgb(232, 223, 223);
+}
+.CommonListHeaderLeftMost {
+	padding: 4px; border: 1px solid rgb(232, 223, 223); text-align: center; color: rgb(102, 102, 102); font-family: Arial, Verdana, Sans-serif; font-size: 80%; font-weight: bold; background-color: rgb(232, 223, 223);
+}
+.CommonListHeader {
+	border-width: 1px 1px 1px 0px; border-style: solid; border-color: rgb(232, 223, 223); padding: 4px; text-align: center; color: rgb(102, 102, 102); font-family: Arial, Verdana, Sans-serif; font-size: 80%; font-weight: bold; background-color: rgb(232, 223, 223);
+}
+.CommonListCellLeftMost {
+	border-width: 0px 1px 1px; border-style: solid; border-color: rgb(232, 223, 223); padding: 4px; color: rgb(103, 92, 109); font-family: Arial, Verdana, Sans-serif; font-size: 80%;
+}
+.CommonListCell {
+	border-width: 0px 1px 1px 0px; border-style: solid; border-color: rgb(232, 223, 223); padding: 4px; text-align: left; color: rgb(103, 92, 109); font-family: Arial, Verdana, Sans-serif; font-size: 80%;
+}
+.ForumListCellLeftMostImageOnly {
+	border-width: 0px 0px 1px 1px; border-style: solid; border-color: rgb(232, 223, 223); padding: 4px; width: 20px; color: rgb(103, 92, 109); font-family: Arial, Verdana, Sans-serif;
+}

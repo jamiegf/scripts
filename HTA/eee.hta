@@ -1,0 +1,41 @@
+<head>
+<title>Services</title>
+<HTA:APPLICATION 
+     APPLICATIONNAME="HTA Test"
+     SCROLL="yes"
+     SINGLEINSTANCE="yes"
+>
+</head>
+
+<script language="VBScript">
+    Sub GetOSVersion
+        strComputer = inputbox ("Enter machine name")
+		
+    Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+    Set colProcesses = objWMIService.ExecQuery("Select * from Win32_Process")
+
+
+           
+  For Each objProcess in colProcesses
+        strHTML = strHTML & objProcess.Name & "<br>"
+    Next
+
+    DataArea.InnerHTML = strHTML
+
+End Sub
+
+		
+		
+		
+		
+   
+</script>
+
+<body STYLE="font:14 pt arial; color:white;
+ filter:progid:DXImageTransform.Microsoft.Gradient
+(GradientType=1, StartColorStr='#000000', EndColorStr='#0000FF')">
+
+<input type="button" value="Get Services" name="run_button" onClick="GetOSVersion">
+<p>
+<span id = "DataArea"></span>
+</body>

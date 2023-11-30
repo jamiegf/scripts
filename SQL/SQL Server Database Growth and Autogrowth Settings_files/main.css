@@ -1,0 +1,867 @@
+body {
+	margin: 0px; text-align: center; color: rgb(102, 102, 102); font-family: arial, verdana, sans-serif; background-color: rgb(218, 217, 214);
+}
+a {
+	color: rgb(204, 102, 51); text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+a img {
+	border: currentColor;
+}
+td {
+	border-collapse: collapse; border-spacing: 0px;
+}
+table {
+	border-collapse: collapse; border-spacing: 0px;
+}
+tr {
+	border-collapse: collapse; border-spacing: 0px;
+}
+.hidden {
+	display: none;
+}
+.site {
+	background: url("../images/interface/background.gif"); width: 996px; text-align: left; margin-right: auto; margin-left: auto; position: relative; z-index: 100;
+}
+.page {
+	width: 992px; margin-left: 2px;
+}
+.header {
+	padding: 10px 0px 14px 22px; background-color: rgb(51, 51, 51);
+}
+.search {
+	width: 600px; height: 19px; text-align: right; padding-right: 20px; float: right;
+}
+.searchform {
+	height: 19px; margin-top: 10px; vertical-alignment: top;
+}
+.txtSearch {
+	padding: 2px; border: 5px solid rgb(51, 51, 51);
+}
+.searchresults {
+	margin: 10px 40px;
+}
+.searchresults td {
+	font-size: 80%;
+}
+div.search input.btnSearch {
+	border: 12px solid rgb(51, 51, 51);
+}
+.redgate {
+	color: rgb(214, 214, 214); font-size: 75%;
+}
+.redgate a {
+	color: rgb(255, 255, 255);
+}
+.maincontent {
+	margin: 0px; padding: 0px; width: 666px; float: left; background-color: rgb(255, 255, 255);
+}
+.rightcolumn {
+	margin: 0px; padding: 0px; width: 324px; float: right;
+}
+.clear {
+	clear: both;
+}
+input {
+	margin: 0px; padding: 0px;
+}
+form {
+	margin: 0px; padding: 0px;
+}
+.primarynav {
+	padding: 3px 0px 3px 18px; font-size: 80%; font-weight: bold;
+}
+.membernav {
+	padding: 3px 0px 3px 18px; font-size: 80%; font-weight: bold;
+}
+.primarynav a {
+	color: rgb(255, 255, 255); margin-right: 14px;
+}
+.primarynav span.on {
+	margin-right: 14px;
+}
+.primarynav a.on {
+	color: rgb(255, 153, 51);
+}
+.membernav {
+	margin-right: 10px;
+}
+.membernav {
+	color: rgb(255, 255, 255);
+}
+.membernav a {
+	color: rgb(255, 255, 255);
+}
+.primarynav {
+	float: left;
+}
+.membernav {
+	text-align: right;
+}
+.mainnav {
+	background-color: rgb(89, 89, 89);
+}
+.subnav {
+	padding: 3px 0px 3px 18px; color: rgb(255, 255, 255); font-size: 75%; font-weight: normal; background-color: rgb(204, 102, 51);
+}
+.subnav a {
+	color: rgb(102, 102, 102);
+}
+span.on {
+	color: rgb(255, 153, 51);
+}
+.orange {
+	background-color: rgb(204, 102, 51);
+}
+.pagefooter {
+	padding: 3px 5px; clear: both; background-color: rgb(51, 51, 51);
+}
+.pagefooternavright {
+	width: 450px; text-align: right; float: right;
+}
+.pagefooter a {
+	color: rgb(255, 255, 255); font-size: 80%;
+}
+.logo {
+	background: url("../images/interface/simple-talk-logo_252x50.gif") no-repeat; margin: 0px; padding: 0px; width: 252px; height: 50px;
+}
+.categoriespanel span.articlecount {
+	color: rgb(102, 102, 102);
+}
+.articlesummary p.editorscomment {
+	color: rgb(119, 119, 119);
+}
+.subarticlesummary {
+	padding: 10px 0px 0px 50px;
+}
+.summarytext {
+	margin-top: 8px;
+}
+.emailpage {
+	padding: 10px;
+}
+.emailcontent {
+	padding: 10px; border: 1px solid rgb(0, 0, 0); background-color: rgb(214, 214, 214);
+}
+.error {
+	padding: 10px;
+}
+.sectionhomelink {
+	font-weight: bold;
+}
+.featurearticlepanel {
+	margin: 0px; width: 666px;
+}
+.homepanels {
+	width: 662px; text-align: right; margin-top: -18px;
+}
+.sqlpanel {
+	margin: 0px 0px 0px 4px; padding: 0px; width: 326px; float: left;
+}
+.opinionpanel {
+	margin: 0px 0px 0px 4px; padding: 0px; width: 326px; float: left;
+}
+.aspnetpanel {
+	margin: 0px; padding: 0px; width: 326px; float: right;
+}
+.forumspanel {
+	margin: 0px; padding: 0px; width: 326px; float: right;
+}
+.featurearticlepanel .header {
+	background: url("../images/interface/panel_header_feature_666x56.jpg") no-repeat; margin: 0px; padding: 0px; width: 666px; height: 56px;
+}
+.sqlpanel .header {
+	background: url("../images/interface/panel_head_sql_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 48px;
+}
+.aspnetpanel .header {
+	background: url("../images/interface/panel_head_net_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 48px;
+}
+.exchangepanel .header {
+	background: url("../images/interface/panel_head_exchange_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 48px;
+}
+.opinionpanel .header {
+	background: url("../images/interface/panel_header_opinion_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 48px;
+}
+.forumspanel .header {
+	background: url("../images/interface/panel_header_forums_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 48px;
+}
+.featurearticlepanel .middle {
+	background: url("../images/interface/panel_background_666x1.jpg"); width: 666px;
+}
+.sqlpanel .middle {
+	background: url("../images/interface/panel_background_333x1.jpg"); width: 326px; height: 46px;
+}
+.aspnetpanel .middle {
+	background: url("../images/interface/panel_background_333x1.jpg"); width: 326px; height: 46px;
+}
+.opinionpanel .middle {
+	background: url("../images/interface/panel_background_333x1.jpg"); width: 326px; height: 46px;
+}
+.forumspanel .middle {
+	background: url("../images/interface/panel_background_333x1.jpg"); width: 326px; height: 46px;
+}
+.featurearticlepanel .footer {
+	background: url("../images/interface/panel_footer_666x38.jpg") no-repeat; width: 666px; height: 56px;
+}
+.sqlpanel .footer {
+	background: url("../images/interface/panel_footer_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 53px;
+}
+.aspnetpanel .footer {
+	background: url("../images/interface/panel_footer_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 53px;
+}
+.opinionpanel .footer {
+	background: url("../images/interface/panel_footer_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 53px;
+}
+.forumspanel .footer {
+	background: url("../images/interface/panel_footer_326x53.jpg") no-repeat; margin: 0px; padding: 0px; width: 326px; height: 53px;
+}
+.sqlpanel .rsslink {
+	margin: 3px 0px 0px; width: 36px; float: right;
+}
+.opinionpanel .rsslink {
+	margin: 3px 0px 0px; width: 36px; float: right;
+}
+.aspnetpanel .rsslink {
+	margin: 3px 0px 0px; width: 36px; float: right;
+}
+.forumspanel .rsslink {
+	margin: 3px 0px 0px; width: 36px; float: right;
+}
+.featurearticlecontent {
+	padding: 5px 30px; width: 600px; font-size: 80%;
+}
+.title {
+	font-family: "Times New Roman", Times, serif; font-size: 180%;
+}
+.articlesummary span.title {
+	font-family: arial, verdana, sans-serif; font-weight: normal;
+}
+.articlesummary a.title {
+	font-family: arial, verdana, sans-serif; font-weight: normal;
+}
+.panelcontent {
+	padding: 5px 20px 0px; font-size: 80%;
+}
+div.title a.featuretitlelink {
+	color: rgb(204, 102, 51);
+}
+.paneltitlelink {
+	font-weight: bold;
+}
+.panellink {
+	margin: 0px 20px; padding: 0px; font-size: 80%;
+}
+.panelline {
+	margin: 0px 0px 5px 8px;
+}
+.panelarticlecredit {
+	margin: 7px 0px 5px;
+}
+.readmore {
+	margin: 0px; text-align: right;
+}
+.categoriespanel .header {
+	clear: both;
+}
+.categoriespanel .middle .content {
+	margin: 0px 0px 0px 18px;
+}
+.categoriespanel .middle .left {
+	width: 300px; font-size: 80%; float: left;
+}
+.categoriespanel .middle .right {
+	width: 300px; font-size: 80%; float: left;
+}
+.newsletterpanel {
+	font-size: 75%;
+}
+.newsletterpanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../images/interface/archive-header.jpg"); background-repeat: no-repeat;
+}
+.newsletterpanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../images/interface/panel_background_666x1.jpg");
+}
+.newslettermonth {
+	margin-left: 30px;
+}
+.newsletterpanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 38px; background-image: url("../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.newsletterpanel div {
+	width: 300px;
+}
+.newsletterpanel p {
+	margin: 0px 0px 10px 30px; width: 600px;
+}
+.newsletterpanel p.returnButton {
+	margin-top: 20px; margin-bottom: 0px;
+}
+.newsletterrow {
+	padding-left: 30px;
+}
+.newsletterlines {
+	padding-left: 15px;
+}
+.title a {
+	color: rgb(102, 102, 102);
+}
+.article {
+	padding: 10px; color: rgb(51, 51, 51); line-height: 1.4; font-size: 80%;
+}
+.articletitle {
+	font-family: "Times New Roman", Times, serif; font-size: 170%;
+}
+.author {
+	font-style: italic;
+}
+table.rating td {
+	width: 70px; text-align: center; font-size: 80%;
+}
+.articlesummary {
+	margin: 5px 27px 5px 22px; font-size: 80%;
+}
+.articlesummary p {
+	margin: 0px; color: rgb(68, 68, 68);
+}
+.articlesummary .title {
+	margin: 0px; font-family: "Times New Roman", Times, serif; font-size: 140%; font-weight: bold;
+}
+.articledetail {
+	font-size: 85%; background-color: rgb(214, 214, 214);
+}
+.articledetail2 {
+	margin: 6px 0px 5px; padding: 3px; font-size: 85%; background-color: rgb(214, 214, 214);
+}
+.articlesummary p {
+	clear: both;
+}
+.articledetail2 .category {
+	text-align: right;
+}
+.homepagepanel .category {
+	padding: 3px 3px 0px; width: 180px; float: right;
+}
+.homerss {
+	margin: 14px 0px 0px; width: 200px; height: 30px; text-align: right; float: right;
+}
+.signature {
+	top: 4px; position: relative;
+}
+.homepagepanel .authorpicture {
+	margin: 0px 0px 5px 8px;
+}
+.authorpanel p {
+	margin: 7px 0px 10px;
+}
+table.morearticles {
+	border: currentColor; width: 600px;
+}
+table.morearticles td {
+	font-family: Arial, Verdana, sans-serif; font-size: 75%;
+}
+table.morearticles th {
+	font-family: Arial, Verdana, sans-serif; font-size: 75%;
+}
+.morearticles th {
+	text-align: left;
+}
+.newsletters th {
+	text-align: left;
+}
+.morearticles th.listtitle {
+	text-align: left; padding-left: 20px;
+}
+.morearticles td.listtitle {
+	width: 300px; padding-left: 20px;
+}
+.morearticles td.date {
+	width: 115px;
+}
+.morearticles td.rating {
+	width: 65px;
+}
+.morearticles td.vote {
+	width: 75px;
+}
+.morearticles td.listtitle a {
+	color: rgb(204, 102, 51);
+}
+.archivelink {
+	color: rgb(204, 102, 51);
+}
+td.archives {
+	padding: 0px 0px 0px 20px;
+}
+.sidepanels {
+	margin: 0px 0px 0px 5px;
+}
+.authorspanel {
+	width: 666px;
+}
+.authorspanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../images/interface/header_authors_666x48.jpg"); background-repeat: no-repeat;
+}
+.authornamepanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../images/interface/header_authorprofile_666x48.jpg"); background-repeat: no-repeat; background-color: rgb(255, 255, 255);
+}
+.allarticlespanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../images/interface/header_authorarticle_666x48.jpg"); background-repeat: no-repeat; background-color: rgb(255, 255, 255);
+}
+.homepagepanel .header {
+	margin: 0px; padding: 0px; width: 666px; height: 48px; background-image: url("../images/interface/header_latestitems_666x48.gif"); background-repeat: no-repeat; background-color: rgb(255, 255, 255);
+}
+.authorspanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../images/interface/panel_background_666x1.jpg");
+}
+.authornamepanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../images/interface/panel_background_666x1.jpg");
+}
+.allarticlespanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../images/interface/panel_background_666x1.jpg");
+}
+.homepagepanel .middle {
+	margin: 0px; padding: 0px; width: 666px; background-image: url("../images/interface/panel_background_666x1.jpg");
+}
+.authorspanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 44px; background-image: url("../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.authornamepanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 44px; background-image: url("../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.allarticlespanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 44px; background-image: url("../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.homepagepanel .footer {
+	margin: 0px; padding: 0px; width: 666px; height: 44px; background-image: url("../images/interface/panel_footer_666x38.jpg"); background-repeat: no-repeat;
+}
+.authorspanel .lines {
+	margin: 5px 0px 5px 14px;
+}
+.authornamepanel .lines {
+	margin: 5px 0px 5px 14px;
+}
+.allarticlespanel .lines {
+	margin: 5px 0px 5px 14px;
+}
+.homepagepanel .lines {
+	margin: 5px 0px 5px 14px;
+}
+.articlesummary {
+	margin: 0px 27px 0px 22px; font-size: 80%;
+}
+.articlesummary p {
+	margin: 0px;
+}
+.articlesummary .title {
+	margin: 0px; font-family: "Times New Roman", Times, serif; font-size: 140%;
+}
+.content a {
+	color: rgb(204, 102, 51); text-decoration: none;
+}
+.commenttable {
+	width: 500px;
+}
+.rss_link {
+	width: 100px; height: 40px; float: right;
+}
+.authorpicture {
+	margin: 0px 7px 0px 0px;
+}
+.catHeader2 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sql_666x84.jpg");
+}
+.catHeader3 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_net_666x84.jpg");
+}
+.catHeader4 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_opinion_666x84.jpg");
+}
+.catHeader5 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqllearn_666x84.jpg");
+}
+.catHeader6 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqltraining_666x84.jpg");
+}
+.catHeader7 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlserverdbadmin_666x84.jpg");
+}
+.catHeader8 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlserver2005_666x84.jpg");
+}
+.catHeader9 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlserverdevelopment_666x84.jpg");
+}
+.catHeader10 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqltsql_666x84.jpg");
+}
+.catHeader11 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlSSIS_666x84.jpg");
+}
+.catHeader12 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlperformance_666x84.jpg");
+}
+.catHeader13 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlbackupandrecovery_666x84.jpg");
+}
+.catHeader14 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqltools_666x84.jpg");
+}
+.catHeader15 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netlearn_666x84.jpg");
+}
+.catHeader16 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netaspnet_666x84.jpg");
+}
+.catHeader17 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netdataaccess_666x84.jpg");
+}
+.catHeader18 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netframework_666x84.jpg");
+}
+.catHeader19 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netperformance_666x84.jpg");
+}
+.catHeader20 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netvb_666x84.jpg");
+}
+.catHeader21 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netvs_666x84.jpg");
+}
+.catHeader22 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netdevelopment_666x84.jpg");
+}
+.catHeader23 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_nettools_666x84.jpg");
+}
+.catHeader24 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_opinionpieces_666x84.jpg");
+}
+.catHeader25 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_opinioneditor_666x84.jpg");
+}
+.catHeader26 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_opiniongeek_666x84.jpg");
+}
+.catHeader28 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_neteditors_666x84.gif");
+}
+.catHeader29 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqleditors_666x84.gif");
+}
+.catHeader31 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sysadmin_666x84.jpg");
+}
+.catHeader33 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_exchange_666x84.jpg");
+}
+.catHeader35 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_books_666x84.jpg");
+}
+.catHeader36 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_ssis_666x84.jpg");
+}
+.catHeader37 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_reportingservices_666x84.jpg");
+}
+.catHeader38 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_general_666x84.jpg");
+}
+.catHeader39 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_virtualization_666x84.jpg");
+}
+.catHeader40 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_unified_messaging_666x84.jpg");
+}
+.catHeader41 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_powershell_666x84.jpg");
+}
+.catHeader45 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_netbooks_666x84.jpg");
+}
+.catHeader46 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sqlbooks_666x84.jpg");
+}
+.catHeader47 {
+	width: 666px; height: 84px; background-image: url("../images/interface/header_sysadminbooks_666x84.jpg");
+}
+.widget {
+	margin: 0px; padding: 0px; width: 315px; color: rgb(214, 214, 214); font-size: 70%;
+}
+#RelatedArticles .header {
+	background: url("../images/interface/w_relatedarticles_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#RelatedLinks .header {
+	background: url("../images/interface/w_relatedlinks_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#BlogTalk .header {
+	background: url("../images/interface/w_blogtalk_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#WhyJoin .header {
+	background: url("../images/interface/w_whyjoin_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#GeekOfTheWeek .header {
+	background: url("../images/interface/w_geekoftheweek_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#SQLOpinion .header {
+	background: url("../images/interface/w_philfactor_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#NETOpinion .header {
+	background: url("../images/interface/w_damonsdiscourse_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#blogger .header {
+	background: url("../images/interface/w_blogtalk_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#AskedInForums .header {
+	background: url("../images/interface/w_askedintheforums_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#recentarticles .header {
+	background: url("../images/interface/w_latestarticles_header_315.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#recentblogs .header {
+	background: url("../images/interface/w_recentblogs_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#bloggerlist .header {
+	background: url("../images/interface/w_allbloggers_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#OpinionOpinion .header {
+	background: url("../images/interface/w_editorstalk_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#poll .header {
+	background: url("../images/interface/w_poll_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#mostviewedarticles .header {
+	background: url("../images/interface/w_mostviewed_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#topratedarticles .header {
+	background: url("../images/interface/w_toprated_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#freestuff .header {
+	background: url("../images/interface/w_freestuff_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#communityspotlight .header {
+	background: url("../images/interface/w_communityspot_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#forumpersonalities .header {
+	background: url("../images/interface/w_forumpersonalities_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#pinvoke .header {
+	background: url("../images/interface/w_pinvoke_header_315x50.gif") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#exchange_ebook .header {
+	background: url("../images/interface/w_exchange_ebook_header_315x50.gif") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#LarryGonnick .header {
+	background: url("../images/interface/w_larrygonick_header_315x50.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#RSSfeedwidget .header {
+	background: url("../images/interface/w_rss_feeds_header.jpg") no-repeat; margin: 0px; padding: 0px; width: 315px; height: 50px;
+}
+#recentarticles {
+	font-size: 90%;
+}
+#recentblogs {
+	font-size: 90%;
+}
+#bloggerlist {
+	font-size: 90%;
+}
+#recentarticles a {
+	color: rgb(255, 153, 51);
+}
+#bloggerlist a {
+	color: rgb(255, 153, 51);
+}
+#bloggerlist .widgetcontent {
+	width: 300px; position: relative;
+}
+#OpinionOpinion .widgetcontent {
+	width: 260px; position: relative;
+}
+#freestuff .freething {
+	padding: 4px 15px 4px 20px;
+}
+.widget .middle {
+	margin: 0px; padding: 0px; border: 0px currentColor; background-image: url("../images/interface/w_background_315x1.jpg");
+}
+.widget .footer {
+	width: 315px; height: 42px; background-image: url("../images/interface/w_footer_small_315x42.jpg");
+}
+.relateditemlinks {
+	margin: 0px 20px; display: block;
+}
+.bloglinks {
+	margin: 0px 20px 0px 22px; display: block;
+}
+.widgetcontent {
+	margin: 0px 20px 0px 22px; display: block;
+}
+#recentblogs .bloggerprofile {
+	margin: 0px 0px 10px; font-size: 80%;
+}
+.bloggerprofile img {
+	margin-right: 5px;
+}
+.bloggerprofile .name {
+	font-weight: bold;
+}
+.bloglinks .allblogs {
+	text-align: right;
+}
+.joinbutton {
+	width: 100%; text-align: right;
+}
+.getmyfeedbutton {
+	width: 100%; text-align: right;
+}
+.widget ul {
+	margin: 0px;
+}
+#recentblogs .bloggerprofile {
+	width: 275px; position: relative;
+}
+#forumpersonalities .bloggerprofile {
+	width: 275px; font-size: 120%; position: relative;
+}
+#communityspotlight {
+	font-size: 80%;
+}
+#editorstalk {
+	width: 315px; height: 236px; background-image: url("../images/interface/w_editorstalk_panel2_315x23.jpg");
+}
+#WhyJoin img.paper {
+	margin: 0px 10px 0px 0px;
+}
+.widgetline {
+	margin: 4px 0px 4px 9px; padding: 0px; border: 0px currentColor;
+}
+.widget .text a {
+	color: rgb(255, 153, 51);
+}
+.avatar {
+	margin: 0px 5px 5px 0px;
+}
+.widget a {
+	color: rgb(255, 153, 51);
+}
+.widgetcontent a {
+	color: rgb(255, 153, 51);
+}
+.sidelinks a {
+	color: rgb(255, 153, 51);
+}
+#AskInForums {
+	width: 315px; height: 236px; background-image: url("../images/interface/w_askinforums_315x236.jpg");
+}
+#AskInForums .text {
+	padding: 0px 125px 0px 20px;
+}
+#AskInForums .text a {
+	color: rgb(255, 153, 51); font-weight: bold;
+}
+#SQLOpinion img.avatar {
+	margin: 0px 5px 5px 0px;
+}
+.avatar#NETOpinion {
+	margin: 0px 5px 5px 0px;
+}
+.bloggerprofile .avatar {
+	width: 65px; float: left;
+}
+.bloggerprofile {
+	clear: left;
+}
+.CodeForeground {
+	font-family: courier new, courier, monospaced;
+}
+.CodeBackground {
+	font-family: courier new, courier, monospaced; background-color: rgb(255, 255, 255);
+}
+.CodeInText {
+	font-family: courier new, courier, monospaced; font-weight: bold;
+}
+.ImportantWords {
+	font-weight: bold;
+}
+.ScreenText {
+	color: rgb(136, 136, 136); font-family: Tahoma, Arial, sans-serif; font-weight: bold;
+}
+pre {
+	padding: 5px 10px;
+}
+.commentlink {
+	color: rgb(255, 255, 255);
+}
+.commenttitle {
+	width: 100px; font-weight: bold;
+}
+.commenttable td {
+	font-size: 80%;
+}
+a.featuretitlelink:visited {
+	color: rgb(153, 102, 51);
+}
+a.paneltitlelink:visited {
+	color: rgb(153, 102, 51);
+}
+a.title:visited {
+	color: rgb(153, 102, 51);
+}
+.listtitle a:visited {
+	color: rgb(153, 102, 51);
+}
+.left a:visited {
+	color: rgb(153, 102, 51);
+}
+.right:visited {
+	color: rgb(153, 102, 51);
+}
+.widget a:visited {
+	color: rgb(204, 102, 51);
+}
+.CommonSidebarArea a:visited {
+	color: rgb(51, 153, 51);
+}
+body {
+	font-family: arial; z-index: 100;
+}
+.searchterm {
+	color: green;
+}
+.RSSselectors {
+	padding: 22px; font-size: 14px;
+}
+.getmyfeedbutton {
+	margin-top: 20px;
+}
+.rss-inputs {
+	width: 140px; float: left;
+}
+.rss-inputs label {
+	padding-left: 10px;
+}
+.rss-buttons {
+	width: 120px; float: left;
+}
+.rss-advanced {
+	font-size: 11px;
+}
+.rss-advanced-page {
+	padding: 20px;
+}
+.rss-note {
+	margin: 20px; padding: 8px; border: 2px solid rgb(255, 102, 51); text-align: center; color: rgb(102, 102, 102); font-size: 90%; background-color: rgb(233, 233, 233);
+}
+#corner-peel {
+	top: 0px; right: 0px; position: absolute; z-index: 99;
+}
+#corner-peel img {
+	top: 0px; width: 82px; height: 85px; right: 0px; overflow: hidden; position: absolute; z-index: 99;
+}
+#corner-peel-behind {
+	background: url("/images/ads/corner-peel-behind.gif") no-repeat right top; top: 0px; width: 80px; height: 80px; right: 0px; text-indent: -9999px; overflow: hidden; position: absolute; z-index: 50;
+}
+.show-on-ready {
+	display: none;
+}

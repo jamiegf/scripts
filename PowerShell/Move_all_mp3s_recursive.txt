@@ -1,0 +1,5 @@
+$sourceDir = "C:\Users\J\Documents\Soulseek Downloads\complete"
+$format = "*.txt"
+$outDir = "d:\temp"
+
+ get-childitem -Path $sourceDir -Filter $format -recurse |move-item -Destination $outDir 
